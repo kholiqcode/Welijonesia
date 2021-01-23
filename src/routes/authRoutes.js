@@ -1,5 +1,4 @@
-import { Splash } from '../screens';
-import ChooseRole from '../screens/Auth/ChooseRole';
+import { Splash, ChooseRole, CustomerAuth } from '../screens';
 
 const forFade = ({ current }) => ({
   cardStyle: {
@@ -22,6 +21,14 @@ const authRoutes = [
   {
     name: 'ChooseRole',
     component: ChooseRole,
+    options: {
+      headerShown: false,
+      cardStyleInterpolator: forFade,
+    },
+  },
+  {
+    name: 'CustomerAuth',
+    component: CustomerAuth,
     options: {
       headerShown: false,
       cardStyleInterpolator: forFade,

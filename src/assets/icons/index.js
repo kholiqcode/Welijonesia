@@ -20,6 +20,8 @@ import ICMore from './ic-more.svg';
 import ICMessage from './ic-message.svg';
 import ICPlus from './ic-plus.svg';
 import ICCheckmark from './ic-checkmark.svg';
+import ICShow from './ic-show.svg';
+import ICHide from './ic-hide.svg';
 
 export {
   ICHome,
@@ -44,4 +46,6 @@ export {
   ICMessage,
   ICPlus,
   ICCheckmark,
+  ICShow,
+  ICHide,
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { Image, ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { ILBackground1, ILMotorDelivery } from '../../../assets';
 import { WHITE } from '../../../styles';
@@ -15,7 +15,9 @@ const AuthContainer = ({ children }) => {
               <Image source={ILMotorDelivery} />
             </View>
           )}
-          <View style={styles.component}>{children}</View>
+          <ScrollView showsVerticalScrollIndicator={false} style={styles.component}>
+            {children}
+          </ScrollView>
         </View>
       </ImageBackground>
     </>
@@ -36,7 +38,7 @@ const styles = StyleSheet.create({
   },
   component: {
     backgroundColor: WHITE,
-    paddingHorizontal: 35,
+    paddingHorizontal: 20,
     paddingVertical: 20,
     borderRadius: 50 / 2,
   },

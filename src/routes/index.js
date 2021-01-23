@@ -5,7 +5,7 @@ import authRoutes from './authRoutes';
 const Stack = createStackNavigator();
 
 const Router = () => (
-  <Stack.Navigator initialRouteName="ChooseRole">
+  <Stack.Navigator initialRouteName="CustomerAuth">
     {authRoutes.map((route, index) => (
       <Stack.Screen key={index} {...route} />
     ))}
