@@ -39,7 +39,7 @@ const Register = () => {
           onPress={() => setHidePassword(!hidePasswrd)}
         />
         <Gap height={30} />
-        <Button text="MASUK" />
+        <Button text="DAFTAR" />
       </View>
     </View>
   );

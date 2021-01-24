@@ -22,6 +22,7 @@ import ICPlus from './ic-plus.svg';
 import ICCheckmark from './ic-checkmark.svg';
 import ICShow from './ic-show.svg';
 import ICHide from './ic-hide.svg';
+import ICBackCircle from './ic-back-circle.svg';
 
 export {
   ICHome,
@@ -48,4 +49,5 @@ export {
   ICCheckmark,
   ICShow,
   ICHide,
+  ICBackCircle,
 };

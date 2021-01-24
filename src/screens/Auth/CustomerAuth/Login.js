@@ -4,7 +4,7 @@ import { useState } from 'react/cjs/react.development';
 import { Button, Gap, Input } from '../../../components';
 import { FONT_MEDIUM, FONT_REGULAR, PRIMARY, WHITE } from '../../../styles';
 
-const Login = () => {
+const Login = ({ handleSetForgot, handleSetActivation }) => {
   const [hidePasswrd, setHidePassword] = useState(true);
   return (
     <View style={styles.container}>
@@ -29,10 +29,12 @@ const Login = () => {
         />
         <Gap height={30} />
         <TouchableOpacity>
-          <Text style={styles.txtForgotPassword}>Lupa Password?</Text>
+          <Text style={styles.txtForgotPassword} onPress={() => handleSetForgot(true)}>
+            Lupa Password?
+          </Text>
         </TouchableOpacity>
         <Gap height={30} />
-        <Button text="MASUK" />
+        <Button text="MASUK" onPress={() => handleSetForgot(true)} />
       </View>
     </View>
   );

@@ -11,6 +11,7 @@ const Input = ({
   underlineColorAndroid,
   textContentType,
   autoCompleteType,
+  autoCapitalize,
   placeholder,
   keyboardType,
   onChangeText,
@@ -50,6 +51,7 @@ const Input = ({
         onFocus={onFocusForm}
         onBlur={onBlurForm}
         value={value}
+        autoCapitalize={autoCapitalize}
         underlineColorAndroid={underlineColorAndroid}
         textContentType={textContentType}
         autoCompleteType={autoCompleteType}
