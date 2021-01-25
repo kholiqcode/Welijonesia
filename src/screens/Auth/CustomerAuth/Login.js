@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useState } from 'react/cjs/react.development';
+import { ICBackCircle } from '../../../assets';
 import { Button, Gap, Input } from '../../../components';
 import { FONT_MEDIUM, FONT_REGULAR, PRIMARY, WHITE } from '../../../styles';
 
-const Login = ({ handleSetForgot, handleSetActivation }) => {
+const Login = ({ handleSetForgot, handleSetActivation, navigation }) => {
   const [hidePasswrd, setHidePassword] = useState(true);
   return (
     <View style={styles.container}>
@@ -26,6 +27,7 @@ const Login = ({ handleSetForgot, handleSetActivation }) => {
           variant="roundedPill"
           hidePassword={hidePasswrd}
           onPress={() => setHidePassword(!hidePasswrd)}
+          rightIcon
         />
         <Gap height={30} />
         <TouchableOpacity>
@@ -34,7 +36,11 @@ const Login = ({ handleSetForgot, handleSetActivation }) => {
           </Text>
         </TouchableOpacity>
         <Gap height={30} />
-        <Button text="MASUK" onPress={() => handleSetForgot(true)} />
+        <Button text="MASUK" />
+        <Gap height={30} />
+        <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.goBack()}>
+          <ICBackCircle height={50} width={50} />
+        </TouchableOpacity>
       </View>
     </View>
   );

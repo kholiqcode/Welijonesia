@@ -5,7 +5,7 @@ import authRoutes from './authRoutes';
 const Stack = createStackNavigator();
 
 const Router = () => (
-  <Stack.Navigator initialRouteName="CustomerAuth">
+  <Stack.Navigator initialRouteName="Splash">
     {authRoutes.map((route, index) => (
       <Stack.Screen key={index} {...route} />
     ))}

@@ -1,6 +1,14 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { FONT_REGULAR, GRAY_THIN, PRIMARY, WHITE } from '../../../styles';
+import {
+  BLACK,
+  FONT_MEDIUM,
+  FONT_REGULAR,
+  GRAY_THIN,
+  PRIMARY,
+  SECONDARY,
+  WHITE,
+} from '../../../styles';
 
 const AuthTopTab = ({ state, descriptors, navigation, position }) => (
   <View
@@ -57,7 +65,15 @@ const AuthTopTab = ({ state, descriptors, navigation, position }) => (
             borderRadius: 30,
           }}
         >
-          <Text style={{ textAlign: 'center', ...FONT_REGULAR(14) }}>{label}</Text>
+          <Text
+            style={{
+              textAlign: 'center',
+              ...FONT_MEDIUM(14),
+              color: isFocused ? WHITE : SECONDARY,
+            }}
+          >
+            {label}
+          </Text>
         </TouchableOpacity>
       );
     })}

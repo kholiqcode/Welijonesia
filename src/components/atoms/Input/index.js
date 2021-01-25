@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { useState } from 'react/cjs/react.development';
-import { ICHide, ICHome, ICShow } from '../../../assets';
-import { FONT_MEDIUM, FONT_REGULAR, GRAY_THIN, PRIMARY, WHITE } from '../../../styles';
+import { ICDown, ICHide, ICShow } from '../../../assets';
+import { FONT_MEDIUM, GRAY_THIN, PRIMARY, WHITE } from '../../../styles';
 
 const Input = ({
   ref,
@@ -21,6 +20,8 @@ const Input = ({
   variant,
   hidePassword,
   onPress,
+  select,
+  rightIcon,
 }) => {
   const [border, setBorder] = useState(GRAY_THIN);
   const [radius, setRadius] = useState(30 / 2);
@@ -44,6 +45,14 @@ const Input = ({
     }
   }, []);
 
+  const Icon = () => {
+    if (select) return <ICDown height={24} width={24} />;
+    if (secureTextEntry) {
+      if (hidePassword) return <ICShow height={24} width={24} />;
+      if (!hidePassword) return <ICHide height={24} width={24} />;
+    }
+  };
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -64,9 +73,9 @@ const Input = ({
         keyboardShouldPersistTaps={keyboardShouldPersistTaps}
         style={styles.input(border, radius)}
       />
-      {secureTextEntry && (
+      {rightIcon && (
         <TouchableOpacity style={styles.iconWrapper} onPress={onPress}>
-          {!hidePassword ? <ICShow height={24} width={24} /> : <ICHide height={24} width={24} />}
+          <Icon />
         </TouchableOpacity>
       )}
     </View>

@@ -1,25 +1,15 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React, { useState } from 'react';
+import { Text, View } from 'react-native';
+import Animated from 'react-native-reanimated';
+import BottomSheet from 'reanimated-bottom-sheet';
 import { AuthContainer, AuthTopTab } from '../../../components';
 import Activation from './Activation';
+import Forgot from './Forgot';
 import Login from './Login';
 import Register from './Register';
-import Forgot from './Forgot';
 
 const TopTab = createMaterialTopTabNavigator();
-const routesWithNoTabNavigator = ['Activation'];
-TopTab.navigationOptions = ({ navigation }) => {
-  let tabBarVisible = true;
-  console.log(navigation);
-  const currentRoute = navigation.state.routes[navigation.state.routes.length - 1].routeName;
-  if (routesWithNoTabNavigator.includes(currentRoute)) {
-    tabBarVisible = false;
-  }
-
-  return {
-    tabBarVisible,
-  };
-};
 const TopTabAuth = (props) => {
   const LoginTab = () => <Login {...props} />;
   const RegisterTab = () => <Register {...props} />;
@@ -32,7 +22,7 @@ const TopTabAuth = (props) => {
   );
 };
 
-const CustomerAuth = () => {
+const CustomerAuth = (props) => {
   const [isActivation, setIsActivation] = useState(false);
   const [isForgot, setIsForgot] = useState(false);
 
@@ -48,12 +38,18 @@ const CustomerAuth = () => {
   return (
     <AuthContainer>
       {/* Forgot Active */}
-      {!isActivation && isForgot && <Forgot handleSetForgot={handleSetActivation} />}
+      {!isActivation && isForgot && <Forgot handleSetForgot={handleSetActivation} {...props} />}
       {/* Activation Active */}
-      {isActivation && !isForgot && <Activation handleSetActivation={handleSetActivation} />}
+      {isActivation && !isForgot && (
+        <Activation handleSetActivation={handleSetActivation} {...props} />
+      )}
       {/* Auth Active */}
       {!isActivation && !isForgot && (
-        <TopTabAuth handleSetActivation={handleSetActivation} handleSetForgot={handleSetForgot} />
+        <TopTabAuth
+          handleSetActivation={handleSetActivation}
+          handleSetForgot={handleSetForgot}
+          {...props}
+        />
       )}
     </AuthContainer>
   );

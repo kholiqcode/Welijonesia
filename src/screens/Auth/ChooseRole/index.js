@@ -4,7 +4,7 @@ import { ILMotorDelivery } from '../../../assets';
 import { AuthContainer, Button, Gap } from '../../../components';
 import { FONT_REGULAR, PRIMARY } from '../../../styles';
 
-const ChooseRole = () => (
+const ChooseRole = ({ navigation }) => (
   <AuthContainer>
     <View style={styles.welcomeWrapper}>
       <Image source={ILMotorDelivery} />
@@ -17,7 +17,11 @@ const ChooseRole = () => (
       <Gap height={22} />
     </View>
     <View>
-      <Button text="Pelanggan" variant="roundedPill" />
+      <Button
+        text="Pelanggan"
+        variant="roundedPill"
+        onPress={() => navigation.navigate('CustomerAuth')}
+      />
       <Gap height={20} />
       <Button text="Penjual" variant="roundedPill" />
     </View>
