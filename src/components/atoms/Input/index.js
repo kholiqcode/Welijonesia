@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { useState } from 'react/cjs/react.development';
-import { ICDown, ICHide, ICShow } from '../../../assets';
+import { ICDown, ICHide, ICSearch, ICShow } from '../../../assets';
 import { FONT_MEDIUM, GRAY_THIN, PRIMARY, WHITE } from '../../../styles';
 
 const Input = ({
@@ -22,6 +22,8 @@ const Input = ({
   onPress,
   select,
   rightIcon,
+  search,
+  noBorder,
 }) => {
   const [border, setBorder] = useState(GRAY_THIN);
   const [radius, setRadius] = useState(30 / 2);
@@ -47,6 +49,7 @@ const Input = ({
 
   const Icon = () => {
     if (select) return <ICDown height={24} width={24} />;
+    if (search) return <ICSearch height={24} width={24} />;
     if (secureTextEntry) {
       if (hidePassword) return <ICShow height={24} width={24} />;
       if (!hidePassword) return <ICHide height={24} width={24} />;
@@ -71,7 +74,8 @@ const Input = ({
         editable={!disable}
         selectTextOnFocus={!disable}
         keyboardShouldPersistTaps={keyboardShouldPersistTaps}
-        style={styles.input(border, radius)}
+        style={styles.input(border, radius, noBorder)}
+        numberOfLines={1}
       />
       {rightIcon && (
         <TouchableOpacity style={styles.iconWrapper} onPress={onPress}>
@@ -88,15 +92,16 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
   },
-  input: (border, radius) => ({
+  input: (border, radius, noBorder) => ({
     backgroundColor: WHITE,
-    borderWidth: 1,
+    borderWidth: noBorder ? 0 : 1,
     borderColor: border,
     borderRadius: radius,
-    paddingHorizontal: 15,
+    paddingStart: 15,
     paddingVertical: 8,
     ...FONT_MEDIUM(14),
     justifyContent: 'center',
+    paddingEnd: 40,
   }),
   iconWrapper: {
     position: 'absolute',

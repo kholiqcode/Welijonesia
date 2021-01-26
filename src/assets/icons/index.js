@@ -24,6 +24,10 @@ import ICShow from './ic-show.svg';
 import ICHide from './ic-hide.svg';
 import ICBackCircle from './ic-back-circle.svg';
 import ICDown from './ic-down.svg';
+import ICLink from './ic-link.svg';
+import ICChat from './ic-chat.svg';
+import ICDownCircle from './ic-down-circle.svg';
+import ICUpCircle from './ic-up-circle.svg';
 
 export {
   ICHome,
@@ -52,4 +56,8 @@ export {
   ICHide,
   ICBackCircle,
   ICDown,
+  ICLink,
+  ICChat,
+  ICDownCircle,
+  ICUpCircle,
 };
