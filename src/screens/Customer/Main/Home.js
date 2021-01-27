@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { Gap } from '../../../components';
-import { CardProduct, Filter, Header } from '../../../components/molecules';
+import { CardSeller, Filter, Header } from '../../../components/molecules';
 import { FONT_MEDIUM, GRAY_LIGHT, GRAY_MEDIUM, GRAY_THIN, WHITE } from '../../../styles';
 
 const Home = ({ navigation }) => {
@@ -99,7 +99,7 @@ const Home = ({ navigation }) => {
         columnWrapperStyle={styles.columnWrapper}
         contentContainerStyle={{ paddingBottom: tabBarHeight }}
         renderItem={({ item, index }) => (
-          <CardProduct onPress={() => navigation.navigate('SellerDetail')} />
+          <CardSeller onPress={() => navigation.navigate('SellerDetail')} />
         )}
         keyExtractor={(item, index) => index.toString()}
       />

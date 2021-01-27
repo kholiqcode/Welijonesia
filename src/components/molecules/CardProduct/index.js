@@ -1,26 +1,22 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ILNoPhoto } from '../../../assets';
-import { FONT_MEDIUM, FONT_REGULAR, PRIMARY, RED, scaleSize, WHITE } from '../../../styles';
+import { FONT_MEDIUM, FONT_REGULAR, PRIMARY, SECONDARY, WHITE } from '../../../styles';
 import { Gap } from '../../atoms';
 
-const CardProduct = ({ onPress }) => (
-  <TouchableOpacity style={styles.container} onPress={onPress}>
-    <View style={styles.topLabel}>
-      <Text style={styles.typeSeller} numberOfLines={1}>
-        Keliling
-      </Text>
-    </View>
-    <Gap height={12} />
+const CardProduct = () => (
+  <TouchableOpacity style={styles.container}>
+    <Text style={styles.categoryName}>Pokok</Text>
     <View style={styles.imageWrapper}>
       <Image source={ILNoPhoto} style={styles.productImage} />
     </View>
-    <Text style={styles.sellerName}>Sugiono</Text>
-
+    <Text style={styles.productName}>Sayuran</Text>
     <Gap height={10} />
-    <Text style={styles.sellerAddress} numberOfLines={2} ellipsizeMode="tail">
-      {/* {rute.join(' => ')} */}
-      Perum Mastrip - Cluster Tidar - Bunga NirwanaPerum Mastrip - Cluster Tidar - Bunga Nirwana
+    <Text style={styles.productPrice} numberOfLines={1} ellipsizeMode="tail">
+      Rp 100.000
+    </Text>
+    <Text style={styles.productUnit} numberOfLines={2} ellipsizeMode="tail">
+      Tersedia /Kg/Pcs/Liter
     </Text>
   </TouchableOpacity>
 );
@@ -29,38 +25,38 @@ export default CardProduct;
 
 const styles = StyleSheet.create({
   container: {
-    width: '48%',
+    width: '46%',
     backgroundColor: WHITE,
-    marginTop: 5,
     padding: 10,
     borderRadius: 10 / 2,
+    margin: 5,
   },
   imageWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
   },
   productImage: {
-    maxHeight: scaleSize(120),
-    maxWidth: scaleSize(120),
+    maxHeight: 100,
+    maxWidth: 100,
   },
-  typeSeller: {
+  categoryName: {
     color: WHITE,
     ...FONT_REGULAR(12),
+    position: 'absolute',
+    paddingHorizontal: 5,
+    backgroundColor: PRIMARY,
+    borderBottomRightRadius: 5,
+    borderTopLeftRadius: 5,
   },
-  sellerName: {
+  productName: {
     ...FONT_MEDIUM(12),
   },
-  sellerAddress: {
-    color: RED,
-    ...FONT_REGULAR(10),
+  productPrice: {
+    color: SECONDARY,
+    ...FONT_MEDIUM(12),
   },
-  topLabel: {
-    position: 'absolute',
-    backgroundColor: PRIMARY,
-    top: 0,
-    left: 0,
-    padding: 3,
-    borderBottomRightRadius: 10 / 2,
-    borderTopLeftRadius: 10 / 2,
+  productUnit: {
+    color: SECONDARY,
+    ...FONT_MEDIUM(10),
   },
 });

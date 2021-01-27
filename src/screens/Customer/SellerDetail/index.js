@@ -146,7 +146,7 @@ const SellerDetail = () => {
         </View>
         <View style={styles.sellerInfo}>
           <View style={styles.itemSellerInfo}>
-            <Text style={styles.infoValue}>0/5.0</Text>
+            <Text style={styles.infoValue}>0.0/5.0</Text>
             <Text style={styles.infoDesc}>Dari Pembeli</Text>
           </View>
           <Gap style={styles.border} />
@@ -236,11 +236,11 @@ const styles = StyleSheet.create({
     ...boxShadow(GRAY_DARK, { height: -10, width: -10 }, 10, 1),
   },
   infoValue: {
-    ...FONT_MEDIUM(14),
+    ...FONT_MEDIUM(16),
     color: WHITE,
   },
   infoDesc: {
-    ...FONT_MEDIUM(12),
+    ...FONT_MEDIUM(14),
     color: WHITE,
   },
 });

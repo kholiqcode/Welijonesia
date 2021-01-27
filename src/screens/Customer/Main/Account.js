@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ICChatWHite, ILNoPhoto } from '../../../assets';
+import { ICChatWhite, ILNoPhoto } from '../../../assets';
 import { Button, Gap, Input } from '../../../components';
 import {
   boxShadow,
@@ -15,7 +15,7 @@ const Account = ({ navigation }) => (
   <View style={styles.container}>
     <View style={styles.header}>
       <View style={{ width: '40%', alignItems: 'flex-end' }}>
-        <ICChatWHite height={30} width={30} />
+        <ICChatWhite height={30} width={30} />
       </View>
       <View style={{ width: '40%' }}>
         <Button text="Login" greenDark variant="roundedPill" />
