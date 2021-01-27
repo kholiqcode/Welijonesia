@@ -25,6 +25,7 @@ const Input = ({
   search,
   noBorder,
   more,
+  multiline,
 }) => {
   const [border, setBorder] = useState(GRAY_THIN);
   const [radius, setRadius] = useState(30 / 2);
@@ -77,7 +78,8 @@ const Input = ({
         selectTextOnFocus={!disable}
         keyboardShouldPersistTaps={keyboardShouldPersistTaps}
         style={styles.input(border, radius, noBorder)}
-        numberOfLines={1}
+        numberOfLines={multiline ?? 1}
+        multiline
       />
       {rightIcon && (
         <TouchableOpacity style={styles.iconWrapper} onPress={onPress}>

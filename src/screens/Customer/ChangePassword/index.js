@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  Keyboard,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { ILNoPhoto } from '../../../assets';
 import { Button, Gap, Input } from '../../../components';
@@ -20,7 +30,7 @@ const ChangePassword = ({ navigation }) => {
   const [hidePasswrd, setHidePassword] = useState(true);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onStartShouldSetResponder={() => Keyboard.dismiss()}>
       <View style={styles.header}>
         <Button btnIcon="back" onPress={() => navigation.goBack()} />
         <View
@@ -38,9 +48,6 @@ const ChangePassword = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.navigation}>
-        <View style={styles.photoProfil}>
-          <Image source={ILNoPhoto} style={styles.avatar} />
-        </View>
         <Gap height={40} />
         <View style={{ paddingHorizontal: 15 }}>
           <Input
@@ -94,19 +101,6 @@ const styles = StyleSheet.create({
     flex: 3,
     paddingHorizontal: 10,
     paddingBottom: '20%',
-  },
-  photoProfil: {
-    borderRadius: 120 / 2,
-    height: 120,
-    width: 120,
-    backgroundColor: WHITE,
-    marginTop: -120 / 2,
-    ...boxShadow(GRAY_DARK, { height: -1, width: -1 }, 5, 1),
-    padding: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    position: 'relative',
   },
   avatar: {
     height: 100,

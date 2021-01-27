@@ -24,7 +24,10 @@ const Address = ({ navigation }) => (
     </View>
     <View style={styles.navigation}>
       <Gap height={20} />
-      <TouchableOpacity style={{ paddingHorizontal: 15 }}>
+      <TouchableOpacity
+        style={{ paddingHorizontal: 15 }}
+        onPress={() => navigation.navigate('AddAddressCustomer')}
+      >
         <View style={styles.cardAddressAdd}>
           <ICPlusOutline height={60} width={60} />
         </View>
@@ -39,7 +42,10 @@ const Address = ({ navigation }) => (
           </Text>
           <Gap width={5} />
           <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-            <Button btnIcon="editAddress" />
+            <Button
+              btnIcon="editAddress"
+              onPress={() => navigation.navigate('AddAddressCustomer')}
+            />
             <Gap width={5} />
             <Button btnIcon="trash" />
           </View>

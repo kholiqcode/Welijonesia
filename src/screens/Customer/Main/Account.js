@@ -48,7 +48,7 @@ const Account = ({ navigation }) => (
           <Input placeholder="Edit Profil" variant="roundedPill" more rightIcon disable noBorder />
         </TouchableOpacity>
         <Gap height={20} />
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('ChangePasswordCustomer')}>
           <Input
             placeholder="Ubah Password"
             variant="roundedPill"
@@ -59,7 +59,7 @@ const Account = ({ navigation }) => (
           />
         </TouchableOpacity>
         <Gap height={20} />
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('AddressCustomer')}>
           <Input placeholder="Alamat" variant="roundedPill" more rightIcon disable noBorder />
         </TouchableOpacity>
         <Gap height={20} />

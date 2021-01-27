@@ -4,6 +4,7 @@ import React from 'react';
 import { BottomTabNavigator } from '../components';
 import {
   Account,
+  AddAddress,
   Address,
   Cart,
   ChangePassword,
@@ -41,6 +42,14 @@ export const customerRoutes = [
   {
     name: 'AddressCustomer',
     component: Address,
+    options: {
+      headerShown: false,
+      cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid,
+    },
+  },
+  {
+    name: 'AddAddressCustomer',
+    component: AddAddress,
     options: {
       headerShown: false,
       cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid,

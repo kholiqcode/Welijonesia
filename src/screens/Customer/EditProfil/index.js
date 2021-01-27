@@ -5,7 +5,7 @@ import { ILNoPhoto } from '../../../assets';
 import { Button, Gap, Input } from '../../../components';
 import {
   boxShadow,
-    FONT_BOLD,
+  FONT_BOLD,
   FONT_MEDIUM,
   GRAY_DARK,
   GRAY_LIGHT,
@@ -92,7 +92,7 @@ const EditProfil = ({ navigation }) => {
             alignItems: 'center',
           }}
         >
-          <Text style={{ ...FONT_BOLD(26), color: WHITE }}>CHANGE PASSWORD</Text>
+          <Text style={{ ...FONT_BOLD(26), color: WHITE }}>EDIT PROFIL</Text>
         </View>
       </View>
       <View style={styles.navigation}>
