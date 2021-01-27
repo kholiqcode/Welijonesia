@@ -6,7 +6,7 @@ import { Gap } from '../../../components';
 import { CardProduct, Filter, Header } from '../../../components/molecules';
 import { FONT_MEDIUM, GRAY_LIGHT, GRAY_MEDIUM, GRAY_THIN, WHITE } from '../../../styles';
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const [seller, setSeller] = useState([0, 1, 2, 3, 4, 5]);
   const [selectRute, setSelectRute] = useState(false);
   const [selectType, setSelectType] = useState(false);
@@ -98,7 +98,10 @@ const Home = () => {
         stickyHeaderIndices={[0]}
         columnWrapperStyle={styles.columnWrapper}
         contentContainerStyle={{ paddingBottom: tabBarHeight }}
-        renderItem={({ item, index }) => <CardProduct key={index} />}
+        renderItem={({ item, index }) => (
+          <CardProduct onPress={() => navigation.navigate('SellerDetail')} />
+        )}
+        keyExtractor={(item, index) => index.toString()}
       />
       <BottomSheet
         ref={sheetRef}

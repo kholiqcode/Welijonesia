@@ -90,7 +90,7 @@ export default ChangePassword;
 const styles = StyleSheet.create({
   container: { flex: 1 },
   header: {
-    flex: 1,
+    flex: 0.8,
     backgroundColor: PRIMARY,
     justifyContent: 'space-between',
     alignItems: 'flex-start',

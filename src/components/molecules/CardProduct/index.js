@@ -4,8 +4,8 @@ import { ILNoPhoto } from '../../../assets';
 import { FONT_MEDIUM, FONT_REGULAR, PRIMARY, RED, scaleSize, WHITE } from '../../../styles';
 import { Gap } from '../../atoms';
 
-const CardProduct = (props) => (
-  <TouchableOpacity style={styles.container}>
+const CardProduct = ({ onPress }) => (
+  <TouchableOpacity style={styles.container} onPress={onPress}>
     <View style={styles.topLabel}>
       <Text style={styles.typeSeller} numberOfLines={1}>
         Keliling

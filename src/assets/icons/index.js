@@ -28,7 +28,7 @@ import ICLink from './ic-link.svg';
 import ICChat from './ic-chat.svg';
 import ICDownCircle from './ic-down-circle.svg';
 import ICUpCircle from './ic-up-circle.svg';
-import ICChatWHite from './ic-chat-white.svg';
+import ICChatWhite from './ic-chat-white.svg';
 import ICCamera from './ic-camera.svg';
 import ICPlusOutline from './ic-plus-outline.svg';
 import ICEditAddress from './ic-edit-address.svg';
@@ -65,7 +65,7 @@ export {
   ICChat,
   ICDownCircle,
   ICUpCircle,
-  ICChatWHite,
+  ICChatWhite,
   ICCamera,
   ICPlusOutline,
   ICTrash,

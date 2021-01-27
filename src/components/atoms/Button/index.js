@@ -4,7 +4,17 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { FONT_MEDIUM, GREEN_DARK, PRIMARY, RED, SECONDARY, WHITE } from '../../../styles';
 import BtnIcon from './BtnIcon';
 
-const Button = ({ text, onPress, btnIcon, variant, primary, secondary, danger, greenDark }) => {
+const Button = ({
+  text,
+  onPress,
+  btnIcon,
+  variant,
+  primary,
+  secondary,
+  danger,
+  greenDark,
+  disabled,
+}) => {
   let bgColor = PRIMARY;
   let txtColor = WHITE;
   let radius = 30 / 2;
@@ -31,7 +41,7 @@ const Button = ({ text, onPress, btnIcon, variant, primary, secondary, danger, g
     txtColor = WHITE;
   }
 
-  if (btnIcon) return <BtnIcon onPress={onPress} btnIcon={btnIcon} />;
+  if (btnIcon) return <BtnIcon onPress={onPress} btnIcon={btnIcon} disabled={disabled} />;
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container(bgColor, radius)}>

@@ -6,7 +6,7 @@ import { CustomerMainScreen, customerRoutes } from './customerRoutes';
 const Stack = createStackNavigator();
 
 const Router = () => (
-  <Stack.Navigator initialRouteName="CustomerMainScreen">
+  <Stack.Navigator initialRouteName="SellerDetail">
     {authRoutes.map((route, index) => (
       <Stack.Screen key={index} {...route} />
     ))}

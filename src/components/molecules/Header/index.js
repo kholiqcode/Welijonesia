@@ -14,6 +14,7 @@ const Header = ({ flat, title }) => (
           search
           rightIcon
           noBorder
+          number
         />
       </View>
     )}

@@ -93,15 +93,6 @@ const Address = ({ navigation }) => (
         <Gap height={40} />
       </ScrollView>
     </View>
-    {/* <View style={styles.content}>
-      <View style={styles.cardAddress}>
-        <Text style={styles.address}>
-          Shinta Mauliantika, 082244016472, RT 003/RW 006, Desa Buduan Utara, Kec. Suboh, Kab.
-          Situbondo
-        </Text>
-        <Text style={styles.addressStatus}>Utama</Text>
-      </View>
-    </View> */}
   </View>
 );
 
@@ -160,7 +151,7 @@ const styles = StyleSheet.create({
     color: WHITE,
   },
   header: {
-    flex: 0.7,
+    flex: 0.5,
     backgroundColor: PRIMARY,
     justifyContent: 'space-between',
     alignItems: 'flex-start',

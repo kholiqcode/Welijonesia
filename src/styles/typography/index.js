@@ -25,19 +25,19 @@ export const LINE_HEIGHT_16 = scaleFont(16);
 
 // FONT STYLE
 export const FONT_REGULAR = (size = FONT_SIZE_12) => ({
-  fontSize: size,
+  fontSize: scaleFont(size),
   fontFamily: FONT_FAMILY_REGULAR,
   fontWeight: FONT_WEIGHT_REGULAR,
 });
 
 export const FONT_MEDIUM = (size = FONT_SIZE_12) => ({
-  fontSize: size,
+  fontSize: scaleFont(size),
   fontFamily: FONT_FAMILY_MEDIUM,
   fontWeight: FONT_WEIGHT_MEDIUM,
 });
 
 export const FONT_BOLD = (size = FONT_SIZE_12) => ({
-  fontSize: size,
+  fontSize: scaleFont(size),
   fontFamily: FONT_FAMILY_BOLD,
   fontWeight: FONT_WEIGHT_BOLD,
 });
