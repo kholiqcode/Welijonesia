@@ -36,7 +36,7 @@ const Login = ({ handleSetForgot, handleSetActivation, navigation }) => {
           </Text>
         </TouchableOpacity>
         <Gap height={30} />
-        <Button text="MASUK" />
+        <Button text="MASUK" onPress={() => navigation.navigate('CustomerMainScreen')} />
         <Gap height={30} />
         <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.goBack()}>
           <ICBackCircle height={50} width={50} />

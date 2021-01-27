@@ -13,7 +13,6 @@ const CardOrder = () => {
       style={{
         borderRadius: 15,
         paddingHorizontal: 20,
-        marginHorizontal: 10,
         backgroundColor: WHITE,
         paddingVertical: 10,
       }}

@@ -1,18 +1,18 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import authRoutes from './authRoutes';
-import { CustomerMainScreen } from './customerRoutes';
+import { CustomerMainScreen, customerRoutes } from './customerRoutes';
 
 const Stack = createStackNavigator();
 
 const Router = () => (
-  <Stack.Navigator initialRouteName="CustomerMainScreen">
+  <Stack.Navigator initialRouteName="AddressCustomer">
     {authRoutes.map((route, index) => (
       <Stack.Screen key={index} {...route} />
     ))}
-    {/* {customerRoutes.map((route, index) => (
+    {customerRoutes.map((route, index) => (
       <Stack.Screen key={index} {...route} />
-    ))} */}
+    ))}
     <Stack.Screen
       name="CustomerMainScreen"
       component={CustomerMainScreen}

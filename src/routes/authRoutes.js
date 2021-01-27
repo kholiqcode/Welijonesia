@@ -1,3 +1,4 @@
+import { CardStyleInterpolators } from '@react-navigation/stack';
 import { Splash, ChooseRole, CustomerAuth } from '../screens';
 
 const forFade = ({ current }) => ({
@@ -9,13 +10,26 @@ const forFade = ({ current }) => ({
   },
 });
 
+const horizontalAnimation = ({ current, layouts }) => ({
+  cardStyle: {
+    transform: [
+      {
+        translateX: current.progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [layouts.screen.width, 0],
+        }),
+      },
+    ],
+  },
+});
+
 const authRoutes = [
   {
     name: 'Splash',
     component: Splash,
     options: {
       headerShown: false,
-      cardStyleInterpolator: forFade,
+      cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid,
     },
   },
   {
@@ -23,7 +37,7 @@ const authRoutes = [
     component: ChooseRole,
     options: {
       headerShown: false,
-      cardStyleInterpolator: forFade,
+      cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid,
     },
   },
   {
@@ -31,7 +45,7 @@ const authRoutes = [
     component: CustomerAuth,
     options: {
       headerShown: false,
-      cardStyleInterpolator: forFade,
+      cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid,
     },
   },
 ];

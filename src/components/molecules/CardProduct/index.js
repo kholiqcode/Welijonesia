@@ -6,11 +6,17 @@ import { Gap } from '../../atoms';
 
 const CardProduct = (props) => (
   <TouchableOpacity style={styles.container}>
+    <View style={styles.topLabel}>
+      <Text style={styles.typeSeller} numberOfLines={1}>
+        Keliling
+      </Text>
+    </View>
+    <Gap height={12} />
     <View style={styles.imageWrapper}>
       <Image source={ILNoPhoto} style={styles.productImage} />
     </View>
-    <Text style={styles.typeSeller}>Keliling</Text>
     <Text style={styles.sellerName}>Sugiono</Text>
+
     <Gap height={10} />
     <Text style={styles.sellerAddress} numberOfLines={2} ellipsizeMode="tail">
       {/* {rute.join(' => ')} */}
@@ -38,7 +44,7 @@ const styles = StyleSheet.create({
     maxWidth: scaleSize(120),
   },
   typeSeller: {
-    color: PRIMARY,
+    color: WHITE,
     ...FONT_REGULAR(12),
   },
   sellerName: {
@@ -47,5 +53,14 @@ const styles = StyleSheet.create({
   sellerAddress: {
     color: RED,
     ...FONT_REGULAR(10),
+  },
+  topLabel: {
+    position: 'absolute',
+    backgroundColor: PRIMARY,
+    top: 0,
+    left: 0,
+    padding: 3,
+    borderBottomRightRadius: 10 / 2,
+    borderTopLeftRadius: 10 / 2,
   },
 });

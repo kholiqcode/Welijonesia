@@ -1,6 +1,6 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import React, { useState } from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { Gap } from '../../../components';
 import { CardProduct, Filter, Header } from '../../../components/molecules';
@@ -28,7 +28,7 @@ const Home = () => {
       style={{
         backgroundColor: WHITE,
         padding: 16,
-        height: 800,
+        height: windowHeight * 0.8,
         borderLeftWidth: 1,
         borderRightWidth: 1,
         borderLeftColor: GRAY_LIGHT,
@@ -57,6 +57,7 @@ const Home = () => {
       >
         <Text style={{ ...FONT_MEDIUM(14) }}>Perempuan</Text>
       </TouchableOpacity>
+      <Gap height={tabBarHeight} />
     </View>
   );
 
@@ -110,6 +111,8 @@ const Home = () => {
     </View>
   );
 };
+
+const windowHeight = Dimensions.get('window').height;
 
 export default Home;
 

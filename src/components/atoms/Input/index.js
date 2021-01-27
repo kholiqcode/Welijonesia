@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { useState } from 'react/cjs/react.development';
-import { ICDown, ICHide, ICSearch, ICShow } from '../../../assets';
+import { ICDown, ICHide, ICMore, ICSearch, ICShow } from '../../../assets';
 import { FONT_MEDIUM, GRAY_THIN, PRIMARY, WHITE } from '../../../styles';
 
 const Input = ({
@@ -24,6 +24,7 @@ const Input = ({
   rightIcon,
   search,
   noBorder,
+  more,
 }) => {
   const [border, setBorder] = useState(GRAY_THIN);
   const [radius, setRadius] = useState(30 / 2);
@@ -49,6 +50,7 @@ const Input = ({
 
   const Icon = () => {
     if (select) return <ICDown height={24} width={24} />;
+    if (more) return <ICMore height={24} width={24} />;
     if (search) return <ICSearch height={24} width={24} />;
     if (secureTextEntry) {
       if (hidePassword) return <ICShow height={24} width={24} />;

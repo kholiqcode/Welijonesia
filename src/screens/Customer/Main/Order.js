@@ -12,7 +12,7 @@ const Order = () => {
       <Notif />
       <Gap height={10} />
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.content}>
         <CardOrder />
         <Gap height={20} />
         <CardOrder />
@@ -33,5 +33,8 @@ export default Order;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  content: {
+    paddingHorizontal: 10,
   },
 });

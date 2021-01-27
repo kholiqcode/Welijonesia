@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { FONT_REGULAR, GREEN_DARK, PRIMARY, RED, SECONDARY, WHITE } from '../../../styles';
+import { FONT_MEDIUM, GREEN_DARK, PRIMARY, RED, SECONDARY, WHITE } from '../../../styles';
+import BtnIcon from './BtnIcon';
 
-const Button = ({ text, onPress, variant, primary, secondary, danger, greenDark }) => {
+const Button = ({ text, onPress, btnIcon, variant, primary, secondary, danger, greenDark }) => {
   let bgColor = PRIMARY;
   let txtColor = WHITE;
   let radius = 30 / 2;
@@ -29,6 +30,9 @@ const Button = ({ text, onPress, variant, primary, secondary, danger, greenDark 
     bgColor = GREEN_DARK;
     txtColor = WHITE;
   }
+
+  if (btnIcon) return <BtnIcon onPress={onPress} btnIcon={btnIcon} />;
+
   return (
     <TouchableOpacity onPress={onPress} style={styles.container(bgColor, radius)}>
       <Text style={styles.buttonText(txtColor)}>{text}</Text>
@@ -45,7 +49,7 @@ const styles = StyleSheet.create({
   }),
   buttonText: (txtColor) => ({
     textAlign: 'center',
-    ...FONT_REGULAR(14),
+    ...FONT_MEDIUM(14),
     color: txtColor,
   }),
 });

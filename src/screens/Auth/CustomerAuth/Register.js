@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useState } from 'react/cjs/react.development';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { Button, Gap, Input } from '../../../components';
 import {
@@ -106,6 +105,7 @@ const Register = ({ handleSetActivation }) => {
           variant="roundedPill"
           hidePassword={hidePasswrd}
           onPress={() => setHidePassword(!hidePasswrd)}
+          rightIcon
         />
         <Gap height={15} />
         <Input
@@ -115,6 +115,7 @@ const Register = ({ handleSetActivation }) => {
           variant="roundedPill"
           hidePassword={hidePasswrd}
           onPress={() => setHidePassword(!hidePasswrd)}
+          rightIcon
         />
         <Gap height={30} />
         <Button text="DAFTAR" onPress={() => handleSetActivation(true)} />

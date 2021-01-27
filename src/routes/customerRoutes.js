@@ -1,7 +1,17 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { CardStyleInterpolators } from '@react-navigation/stack';
 import React from 'react';
 import { BottomTabNavigator } from '../components';
-import { Account, Cart, Home, Order, SellerDetail } from '../screens/Customer';
+import {
+  Account,
+  Address,
+  Cart,
+  ChangePassword,
+  EditProfil,
+  Home,
+  Order,
+  SellerDetail,
+} from '../screens/Customer';
 
 export const customerRoutes = [
   {
@@ -9,6 +19,31 @@ export const customerRoutes = [
     component: SellerDetail,
     options: {
       headerShown: false,
+      cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid,
+    },
+  },
+  {
+    name: 'EditProfilCustomer',
+    component: EditProfil,
+    options: {
+      headerShown: false,
+      cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid,
+    },
+  },
+  {
+    name: 'ChangePasswordCustomer',
+    component: ChangePassword,
+    options: {
+      headerShown: false,
+      cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid,
+    },
+  },
+  {
+    name: 'AddressCustomer',
+    component: Address,
+    options: {
+      headerShown: false,
+      cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid,
     },
   },
 ];

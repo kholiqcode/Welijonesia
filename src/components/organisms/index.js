@@ -1,3 +1,4 @@
 import CardOrder from './CardOrder';
+import CardCart from './CardCart';
 
-export { CardOrder };
+export { CardOrder, CardCart };
