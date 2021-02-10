@@ -11,6 +11,7 @@ import {
   EditProfil,
   Home,
   Order,
+  ProductDetail,
   SellerDetail,
 } from '../screens/Customer';
 
@@ -50,6 +51,14 @@ export const customerRoutes = [
   {
     name: 'AddAddressCustomer',
     component: AddAddress,
+    options: {
+      headerShown: false,
+      cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid,
+    },
+  },
+  {
+    name: 'ProductDetailCustomer',
+    component: ProductDetail,
     options: {
       headerShown: false,
       cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid,

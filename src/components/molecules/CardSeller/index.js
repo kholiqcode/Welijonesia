@@ -5,7 +5,7 @@ import { FONT_MEDIUM, FONT_REGULAR, PRIMARY, RED, scaleSize, WHITE } from '../..
 import { Gap } from '../../atoms';
 
 const CardSeller = ({ onPress }) => (
-  <TouchableOpacity style={styles.container} onPress={onPress}>
+  <TouchableOpacity style={styles.container} onPress={onPress} delayPressOut={0} delayPressIn={0}>
     <View style={styles.topLabel}>
       <Text style={styles.typeSeller} numberOfLines={1}>
         Keliling

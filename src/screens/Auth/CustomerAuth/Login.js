@@ -6,7 +6,7 @@ import { Button, Gap, Input } from '../../../components';
 import { FONT_MEDIUM, FONT_REGULAR, PRIMARY, WHITE } from '../../../styles';
 
 const Login = ({ handleSetForgot, handleSetActivation, navigation }) => {
-  const [hidePasswrd, setHidePassword] = useState(true);
+  const [hidePassword, setHidePassword] = useState(true);
   return (
     <View style={styles.container}>
       <View>
@@ -25,8 +25,8 @@ const Login = ({ handleSetForgot, handleSetActivation, navigation }) => {
           secureTextEntry
           autoCompleteType="password"
           variant="roundedPill"
-          hidePassword={hidePasswrd}
-          onPress={() => setHidePassword(!hidePasswrd)}
+          hidePassword={hidePassword}
+          onPress={() => setHidePassword(!hidePassword)}
           rightIcon
         />
         <Gap height={30} />

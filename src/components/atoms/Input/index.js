@@ -79,7 +79,7 @@ const Input = ({
         keyboardShouldPersistTaps={keyboardShouldPersistTaps}
         style={styles.input(border, radius, noBorder)}
         numberOfLines={multiline ?? 1}
-        multiline
+        multiline={multiline}
         returnKeyType={search ? 'search' : 'done'}
       />
       {rightIcon && (
