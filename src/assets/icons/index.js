@@ -16,6 +16,7 @@ import ICMotor from './ic-motor.svg';
 import ICPhone from './ic-phone.svg';
 import ICRight from './ic-right.svg';
 import ICBack from './ic-back.svg';
+import ICBackActive from './ic-back-active.svg';
 import ICMore from './ic-more.svg';
 import ICMessage from './ic-message.svg';
 import ICPlus from './ic-plus.svg';
@@ -53,6 +54,7 @@ export {
   ICMotor,
   ICRight,
   ICBack,
+  ICBackActive,
   ICMore,
   ICMessage,
   ICPlus,

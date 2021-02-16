@@ -2,7 +2,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import React, { useState } from 'react';
 import { Image, Keyboard, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import BottomSheet from 'reanimated-bottom-sheet';
-import { ILNoPhoto } from '../../../assets';
+import { ICBackActive, ILNoPhoto } from '../../../assets';
 import { Button, Gap, Header } from '../../../components';
 import {
   boxShadow,
@@ -45,7 +45,7 @@ const TopTabSeller = (props) => {
   );
 };
 
-const SellerDetail = () => {
+const SellerDetail = ({ navigation }) => {
   const [isFavorit, setIsFavorit] = useState(false);
   const sheetRef = React.useRef(null);
 
@@ -108,68 +108,73 @@ const SellerDetail = () => {
     </View>
   );
   return (
-    <View style={styles.container} onStartShouldSetResponder={() => Keyboard.dismiss()}>
-      <Header />
-      <View />
-      <View style={styles.content}>
-        <View style={styles.navigationWrapper}>
-          <Button btnIcon="chat-white" />
-          <Gap width={10} />
-          {isFavorit ? (
-            <Button btnIcon="favoritActive" onPress={() => setIsFavorit(!isFavorit)} />
-          ) : (
-            <Button btnIcon="favorit" onPress={() => setIsFavorit(!isFavorit)} />
-          )}
-        </View>
-        <View style={styles.sellerDetail}>
-          <View style={styles.sellerPhotoWrapper}>
-            <Image source={ILNoPhoto} style={styles.sellerPhoto} />
+    <>
+      <View style={styles.container} onStartShouldSetResponder={() => Keyboard.dismiss()}>
+        {/* <Header /> */}
+        <View style={styles.content}>
+          <View style={styles.navigationWrapper}>
+            <Button btnIcon="chat-white" />
+            <Gap width={10} />
+            {isFavorit ? (
+              <Button btnIcon="favoritActive" onPress={() => setIsFavorit(!isFavorit)} />
+            ) : (
+              <Button btnIcon="favorit" onPress={() => setIsFavorit(!isFavorit)} />
+            )}
           </View>
-          <Gap width={20} />
-          <View>
-            <Text style={styles.sellerName}>Lijo Kholiq</Text>
-            <Gap height={5} />
-            <Text
-              style={{
-                ...FONT_REGULAR(12),
-                color: RED,
-                paddingHorizontal: 3,
-                backgroundColor: WHITE,
-                borderRadius: 30,
-                textAlign: 'center',
-                textAlignVertical: 'center',
-              }}
-            >
-              Tutup
-            </Text>
+          <Gap height={15} />
+          <View style={styles.sellerDetail}>
+            <View style={styles.sellerPhotoWrapper}>
+              <Image source={ILNoPhoto} style={styles.sellerPhoto} />
+            </View>
+            <Gap width={20} />
+            <View>
+              <Text style={styles.sellerName}>Lijo Kholiq</Text>
+              <Gap height={5} />
+              <Text
+                style={{
+                  ...FONT_REGULAR(12),
+                  color: RED,
+                  paddingHorizontal: 3,
+                  backgroundColor: WHITE,
+                  borderRadius: 30,
+                  textAlign: 'center',
+                  textAlignVertical: 'center',
+                }}
+              >
+                Tutup
+              </Text>
+            </View>
+          </View>
+          <View style={styles.sellerInfo}>
+            <View style={styles.itemSellerInfo}>
+              <Text style={styles.infoValue}>0.0/5.0</Text>
+              <Text style={styles.infoDesc}>Dari Pembeli</Text>
+            </View>
+            <Gap style={styles.border} />
+            <View style={styles.itemSellerInfo}>
+              <Text style={styles.infoValue}>100</Text>
+              <Text style={styles.infoDesc}>Menyuukai</Text>
+            </View>
+          </View>
+          <Gap height={10} />
+          <View style={styles.topTabWrapper}>
+            <TopTabSeller onBottomSheet />
           </View>
         </View>
-        <View style={styles.sellerInfo}>
-          <View style={styles.itemSellerInfo}>
-            <Text style={styles.infoValue}>0.0/5.0</Text>
-            <Text style={styles.infoDesc}>Dari Pembeli</Text>
-          </View>
-          <Gap style={styles.border} />
-          <View style={styles.itemSellerInfo}>
-            <Text style={styles.infoValue}>100</Text>
-            <Text style={styles.infoDesc}>Menyuukai</Text>
-          </View>
-        </View>
-        <Gap height={10} />
-        <View style={styles.topTabWrapper}>
-          <TopTabSeller onBottomSheet />
-        </View>
-      </View>
 
-      <BottomSheet
-        ref={sheetRef}
-        snapPoints={['100%', 0]}
-        renderContent={renderContent}
-        renderHeader={renderHeader}
-        enabledInnerScrolling={false}
-        initialSnap={1}
-      />
-    </View>
+        <BottomSheet
+          ref={sheetRef}
+          snapPoints={['100%', 0]}
+          renderContent={renderContent}
+          renderHeader={renderHeader}
+          enabledInnerScrolling={false}
+          initialSnap={1}
+        />
+      </View>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <ICBackActive height="30" width="30" />
+      </TouchableOpacity>
+    </>
   );
 };
 export default SellerDetail;
@@ -183,8 +188,18 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     backgroundColor: PRIMARY,
     flex: 1,
-    borderTopWidth: 1,
-    borderTopColor: GRAY_THIN,
+  },
+  backButton: {
+    position: 'absolute',
+    height: 40,
+    width: 40,
+    borderRadius: 15,
+    backgroundColor: WHITE,
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: 10,
+    left: 10,
+    ...boxShadow(GRAY_DARK, { height: 2, width: 2 }, 5, 1),
   },
   navigationWrapper: {
     flexDirection: 'row-reverse',

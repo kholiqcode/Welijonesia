@@ -1,25 +1,32 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ILNoPhoto } from '../../../assets';
 import { FONT_MEDIUM, FONT_REGULAR, PRIMARY, SECONDARY, WHITE } from '../../../styles';
 import { Gap } from '../../atoms';
 
-const CardProduct = () => (
-  <TouchableOpacity style={styles.container}>
-    <Text style={styles.categoryName}>Pokok</Text>
-    <View style={styles.imageWrapper}>
-      <Image source={ILNoPhoto} style={styles.productImage} />
-    </View>
-    <Text style={styles.productName}>Sayuran</Text>
-    <Gap height={10} />
-    <Text style={styles.productPrice} numberOfLines={1} ellipsizeMode="tail">
-      Rp 100.000
-    </Text>
-    <Text style={styles.productUnit} numberOfLines={2} ellipsizeMode="tail">
-      Tersedia /Kg/Pcs/Liter
-    </Text>
-  </TouchableOpacity>
-);
+const CardProduct = () => {
+  const navigation = useNavigation();
+  return (
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => navigation.navigate('ProductDetailCustomer')}
+    >
+      <Text style={styles.categoryName}>Pokok</Text>
+      <View style={styles.imageWrapper}>
+        <Image source={ILNoPhoto} style={styles.productImage} />
+      </View>
+      <Text style={styles.productName}>Sayuran</Text>
+      <Gap height={10} />
+      <Text style={styles.productPrice} numberOfLines={1} ellipsizeMode="tail">
+        Rp 100.000
+      </Text>
+      <Text style={styles.productUnit} numberOfLines={2} ellipsizeMode="tail">
+        Tersedia /Kg/Pcs/Liter
+      </Text>
+    </TouchableOpacity>
+  );
+};
 
 export default CardProduct;
 

@@ -1,9 +1,8 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import React, { useState } from 'react';
-
 import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import BottomSheet from 'reanimated-bottom-sheet';
-import { CardCart, Gap, Header, HeaderProfil, Notif } from '../../../components';
+import { CardCart, Gap, Header, Notif } from '../../../components';
 import { FONT_MEDIUM, GRAY_LIGHT, GRAY_MEDIUM, GRAY_THIN, WHITE } from '../../../styles';
 
 export default function Cart() {
