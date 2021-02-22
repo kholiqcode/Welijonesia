@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { ILMotorDelivery } from '../../../assets';
 import { AuthContainer, Button, Gap } from '../../../components';
 import { FONT_REGULAR, PRIMARY } from '../../../styles';

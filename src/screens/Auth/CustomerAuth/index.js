@@ -1,8 +1,5 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
-import Animated from 'react-native-reanimated';
-import BottomSheet from 'reanimated-bottom-sheet';
 import { AuthContainer, AuthTopTab } from '../../../components';
 import Activation from './Activation';
 import Forgot from './Forgot';

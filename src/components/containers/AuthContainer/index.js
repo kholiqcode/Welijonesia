@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Dimensions, ImageBackground, ScrollView, StyleSheet, View } from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet, View } from 'react-native';
 import Animated, { Easing } from 'react-native-reanimated';
 import { ILBackground1, ILMotorDelivery } from '../../../assets';
 import { WHITE } from '../../../styles';

@@ -12,46 +12,69 @@ import {
   WHITE,
 } from '../../../styles';
 
-const Register = ({ handleSetActivation }) => {
+const Register = ({ handleSetActivation, navigation }) => {
   const [hidePasswrd, setHidePassword] = useState(true);
   const sheetRef = React.useRef(null);
+  const [name, setname] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [gender, setGender] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
 
-  const renderContent = () => (
-    <View
-      style={{
-        backgroundColor: WHITE,
-        padding: 16,
-        height: 300,
-        borderLeftWidth: 1,
-        borderRightWidth: 1,
-        borderLeftColor: GRAY_LIGHT,
-        borderRightColor: GRAY_LIGHT,
-      }}
-    >
-      <TouchableOpacity
+  const initialGender = [
+    {
+      id: 0,
+      label: 'Pilih Jenis Kelamin',
+      value: 'default',
+    },
+    {
+      id: 1,
+      label: 'Laki-laki',
+      value: 'L',
+    },
+    {
+      id: 2,
+      label: 'Perempuan',
+      value: 'P',
+    },
+  ];
+
+  const renderContent = () => {
+    const _onSelect = ({ value }) => {
+      sheetRef.current.snapTo(1);
+      setGender(value);
+    };
+
+    return (
+      <View
         style={{
-          padding: 10,
-          alignItems: 'center',
-          borderBottomWidth: 1,
-          borderBottomColor: GRAY_THIN,
+          backgroundColor: WHITE,
+          padding: 16,
+          height: 300,
+          borderLeftWidth: 1,
+          borderRightWidth: 1,
+          borderLeftColor: GRAY_LIGHT,
+          borderRightColor: GRAY_LIGHT,
         }}
-        onPress={() => sheetRef.current.snapTo(1)}
       >
-        <Text style={{ ...FONT_MEDIUM(14) }}>Laki-Laki</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{
-          padding: 10,
-          alignItems: 'center',
-          borderBottomWidth: 1,
-          borderBottomColor: GRAY_THIN,
-        }}
-        onPress={() => sheetRef.current.snapTo(1)}
-      >
-        <Text style={{ ...FONT_MEDIUM(14) }}>Perempuan</Text>
-      </TouchableOpacity>
-    </View>
-  );
+        {initialGender.map((item, index) => (
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              alignItems: 'center',
+              borderBottomWidth: 1,
+              borderBottomColor: GRAY_THIN,
+            }}
+            onPress={() => _onSelect(item)}
+            key={index}
+          >
+            <Text style={{ ...FONT_MEDIUM(14) }}>{item.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
+  };
 
   const renderHeader = () => (
     <View
@@ -76,11 +99,17 @@ const Register = ({ handleSetActivation }) => {
   );
   return (
     <View style={styles.container}>
-      <View>
+      <View style={{ justifyContent: 'center', flex: 1 }}>
         <Gap height={15} />
         <Text style={styles.screenTitle}>REGISTER WELIJONESIA</Text>
         <Gap height={20} />
-        <Input placeholder="Name" autoCompleteType="name" variant="roundedPill" />
+        <Input
+          placeholder="Name"
+          autoCompleteType="name"
+          variant="roundedPill"
+          value={name}
+          onChangeText={(value) => setname(value)}
+        />
         <Gap height={15} />
         <Input
           placeholder="Jenis Kelamin"
@@ -89,6 +118,16 @@ const Register = ({ handleSetActivation }) => {
           rightIcon
           disable
           onPress={() => sheetRef.current.snapTo(0)}
+          value={gender}
+        />
+        <Gap height={15} />
+        <Input
+          placeholder="Telepon"
+          autoCompleteType="tel"
+          keyboardType="phone-pad"
+          variant="roundedPill"
+          value={phone}
+          onChangeText={(value) => setPhone(value)}
         />
         <Gap height={15} />
         <Input
@@ -96,6 +135,8 @@ const Register = ({ handleSetActivation }) => {
           autoCompleteType="email"
           keyboardType="email-address"
           variant="roundedPill"
+          value={email}
+          onChangeText={(value) => setEmail(value)}
         />
         <Gap height={15} />
         <Input
@@ -106,6 +147,8 @@ const Register = ({ handleSetActivation }) => {
           hidePassword={hidePasswrd}
           onPress={() => setHidePassword(!hidePasswrd)}
           rightIcon
+          value={password}
+          onChangeText={(value) => setPassword(value)}
         />
         <Gap height={15} />
         <Input
@@ -116,12 +159,14 @@ const Register = ({ handleSetActivation }) => {
           hidePassword={hidePasswrd}
           onPress={() => setHidePassword(!hidePasswrd)}
           rightIcon
+          value={passwordConfirmation}
+          onChangeText={(value) => setPasswordConfirmation(value)}
         />
         <Gap height={30} />
-        <Button text="DAFTAR" onPress={() => handleSetActivation(true)} />
+        <Button text="DAFTAR" onPress={() => navigation.navigate('Verification')} />
         <BottomSheet
           ref={sheetRef}
-          snapPoints={['25%', 0]}
+          snapPoints={['30%', 0]}
           renderContent={renderContent}
           renderHeader={renderHeader}
           enabledInnerScrolling={false}

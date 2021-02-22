@@ -5,5 +5,6 @@ import Select from './Select';
 import BottomTabItem from './BottomTabItem';
 import Notif from './Notif';
 import Counter from './Counter';
+import Loading from './Loading';
 
-export { Gap, Button, Input, Select, BottomTabItem, Notif, Counter };
+export { Gap, Button, Input, Select, BottomTabItem, Notif, Counter, Loading };

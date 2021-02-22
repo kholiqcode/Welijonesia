@@ -5,7 +5,7 @@ import { ICDown, ICHide, ICMore, ICSearch, ICShow } from '../../../assets';
 import { FONT_MEDIUM, GRAY_THIN, PRIMARY, WHITE } from '../../../styles';
 
 const Input = ({
-  ref,
+  forwardedRef,
   value,
   underlineColorAndroid,
   textContentType,
@@ -62,7 +62,7 @@ const Input = ({
   return (
     <View style={styles.container}>
       <TextInput
-        ref={ref}
+        ref={forwardedRef}
         onFocus={onFocusForm}
         onBlur={onBlurForm}
         value={value}

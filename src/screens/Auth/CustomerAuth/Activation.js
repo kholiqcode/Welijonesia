@@ -16,34 +16,44 @@ const Activation = ({ handleSetActivation }) => {
 
   return (
     <View style={styles.container}>
-      <View>
-        <Gap height={15} />
-        <Text style={styles.screenTitle}>
-          Verifikasi akun Anda masukkan kode unik yang kami kirim ke alamat email anda
-        </Text>
-        <Gap height={20} />
-        <Input
-          placeholder="Kode"
-          autoCapitalize="characters"
-          keyboardType="email-address"
-          variant="roundedPill"
-        />
-        <Gap height={25} />
-        {counter !== 0 ? (
-          <Text style={styles.txtCounter}>{String(counter).padStart(2, '0')}</Text>
-        ) : (
-          <Button text="KIRIM ULANG" secondary onPress={() => setCounter(60)} />
-        )}
-        <Gap height={25} />
-        <Button text="SUBMIT" />
-        <Gap height={30} />
-        <TouchableOpacity
-          style={{ alignItems: 'center' }}
-          onPress={() => handleSetActivation(false)}
-        >
-          <ICBackCircle height={50} width={50} />
-        </TouchableOpacity>
+      <Gap height={15} />
+      <Text style={styles.screenTitle}>
+        Verifikasi akun Anda masukkan kode unik yang kami kirim ke alamat email anda
+      </Text>
+      <Gap height={20} />
+      <View
+        style={{
+          flexDirection: 'row',
+          flex: 1,
+          backgroundColor: 'red',
+          justifyContent: 'space-between',
+        }}
+      >
+        <View style={{ width: '5%' }}>
+          <Input placeholder="Kode" autoCapitalize="characters" keyboardType="number-pad" />
+        </View>
+        <View style={{ width: '5%' }}>
+          <Input placeholder="Kode" autoCapitalize="characters" keyboardType="number-pad" />
+        </View>
+        <View style={{ width: '5%' }}>
+          <Input placeholder="Kode" autoCapitalize="characters" keyboardType="number-pad" />
+        </View>
+        <View style={{ width: '5%' }}>
+          <Input placeholder="Kode" autoCapitalize="characters" keyboardType="number-pad" />
+        </View>
       </View>
+      <Gap height={25} />
+      {counter !== 0 ? (
+        <Text style={styles.txtCounter}>{String(counter).padStart(2, '0')}</Text>
+      ) : (
+        <Button text="KIRIM ULANG" secondary onPress={() => setCounter(60)} />
+      )}
+      <Gap height={25} />
+      <Button text="SUBMIT" />
+      <Gap height={30} />
+      <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => handleSetActivation(false)}>
+        <ICBackCircle height={50} width={50} />
+      </TouchableOpacity>
     </View>
   );
 };
