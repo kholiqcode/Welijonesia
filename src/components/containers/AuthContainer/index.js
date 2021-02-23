@@ -2,6 +2,7 @@ import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { ImageBackground, ScrollView, StyleSheet, View } from 'react-native';
 import Animated, { Easing } from 'react-native-reanimated';
+import { useSelector } from 'react-redux';
 import { ILBackground1, ILMotorDelivery } from '../../../assets';
 import { WHITE } from '../../../styles';
 
@@ -23,18 +24,17 @@ const AuthContainer = ({ children }) => {
   };
 
   useEffect(() => {
-    runMotor();
     console.log('useEffect');
+    runMotor();
   }, []);
+
   return (
     <>
       <ImageBackground source={ILBackground1} style={styles.container}>
         <View>
-          {route.name !== 'ChooseRole' && (
-            <View style={styles.image}>
-              <Animated.Image source={ILMotorDelivery} style={[positionStyle]} />
-            </View>
-          )}
+          <View style={styles.image}>
+            <Animated.Image source={ILMotorDelivery} style={[positionStyle]} />
+          </View>
           <ScrollView showsVerticalScrollIndicator={false} style={styles.component}>
             {children}
           </ScrollView>

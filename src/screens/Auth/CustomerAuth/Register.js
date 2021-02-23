@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, createRef } from 'react';
+
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { Button, Gap, Input } from '../../../components';
+import { register } from '../../../services';
 import {
   FONT_MEDIUM,
   FONT_REGULAR,
@@ -11,8 +13,9 @@ import {
   PRIMARY,
   WHITE,
 } from '../../../styles';
+import { showMessage, validateEmail } from '../../../utilities';
 
-const Register = ({ handleSetActivation, navigation }) => {
+const Register = ({ navigation }) => {
   const [hidePasswrd, setHidePassword] = useState(true);
   const sheetRef = React.useRef(null);
   const [name, setname] = useState('');
@@ -21,6 +24,13 @@ const Register = ({ handleSetActivation, navigation }) => {
   const [gender, setGender] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
+
+  const nameRef = createRef();
+  const emailRef = createRef();
+  const phoneRef = createRef();
+  const genderRef = createRef();
+  const passwordRef = createRef();
+  const passwordConfirmationRef = createRef();
 
   const initialGender = [
     {
@@ -39,6 +49,55 @@ const Register = ({ handleSetActivation, navigation }) => {
       value: 'P',
     },
   ];
+
+  const _handleRegister = async () => {
+    if (name === '') {
+      showMessage('Nama harus diisi!');
+      return nameRef.current.focus();
+    }
+    if (gender === '') {
+      showMessage('Gender harus diisi!');
+      return genderRef.current.focus();
+    }
+    if (phone === '') {
+      showMessage('Telepon harus diisi!');
+      return phoneRef.current.focus();
+    }
+    if (email === '') {
+      showMessage('Email harus diisi!');
+      return emailRef.current.focus();
+    }
+    if (password === '') {
+      showMessage('Password harus diisi!');
+      return passwordRef.current.focus();
+    }
+    if (passwordConfirmation === '') {
+      showMessage('Konfirmasi Password harus diisi!');
+      return passwordConfirmationRef.current.focus();
+    }
+    if (!validateEmail(email)) {
+      showMessage('Email tidak valid!');
+      return emailRef.current.focus();
+    }
+    if (password !== passwordConfirmation) {
+      showMessage('Konfirmasi password tidak sama!');
+      return passwordConfirmationRef.current.focus();
+    }
+    try {
+      await register({
+        name,
+        gender,
+        phone,
+        email,
+        password,
+        password_confirmation: passwordConfirmation,
+      });
+      navigation.navigate('Verification');
+    } catch (error) {
+      showMessage(error.meta.message ?? 'Registrasi Gagal, Periksa Kembali!');
+      console.log(error);
+    }
+  };
 
   const renderContent = () => {
     const _onSelect = ({ value }) => {
@@ -104,6 +163,7 @@ const Register = ({ handleSetActivation, navigation }) => {
         <Text style={styles.screenTitle}>REGISTER WELIJONESIA</Text>
         <Gap height={20} />
         <Input
+          forwardedRef={nameRef}
           placeholder="Name"
           autoCompleteType="name"
           variant="roundedPill"
@@ -112,6 +172,7 @@ const Register = ({ handleSetActivation, navigation }) => {
         />
         <Gap height={15} />
         <Input
+          forwardedRef={genderRef}
           placeholder="Jenis Kelamin"
           variant="roundedPill"
           select
@@ -122,6 +183,7 @@ const Register = ({ handleSetActivation, navigation }) => {
         />
         <Gap height={15} />
         <Input
+          forwardedRef={phoneRef}
           placeholder="Telepon"
           autoCompleteType="tel"
           keyboardType="phone-pad"
@@ -131,6 +193,7 @@ const Register = ({ handleSetActivation, navigation }) => {
         />
         <Gap height={15} />
         <Input
+          forwardedRef={emailRef}
           placeholder="Email"
           autoCompleteType="email"
           keyboardType="email-address"
@@ -140,6 +203,7 @@ const Register = ({ handleSetActivation, navigation }) => {
         />
         <Gap height={15} />
         <Input
+          forwardedRef={passwordRef}
           placeholder="Password"
           secureTextEntry
           autoCompleteType="password"
@@ -152,6 +216,7 @@ const Register = ({ handleSetActivation, navigation }) => {
         />
         <Gap height={15} />
         <Input
+          forwardedRef={passwordConfirmationRef}
           placeholder="Konfirmasi Password"
           secureTextEntry
           autoCompleteType="password"
@@ -163,10 +228,10 @@ const Register = ({ handleSetActivation, navigation }) => {
           onChangeText={(value) => setPasswordConfirmation(value)}
         />
         <Gap height={30} />
-        <Button text="DAFTAR" onPress={() => navigation.navigate('Verification')} />
+        <Button text="DAFTAR" onPress={() => _handleRegister()} />
         <BottomSheet
           ref={sheetRef}
-          snapPoints={['30%', 0]}
+          snapPoints={['45%', 0]}
           renderContent={renderContent}
           renderHeader={renderHeader}
           enabledInnerScrolling={false}

@@ -30,6 +30,7 @@ const Login = ({ handleSetForgot, navigation }) => {
       await login({ email, password });
       navigation.reset({ index: 0, routes: [{ name: 'CustomerMainScreen' }] });
     } catch (error) {
+      showMessage(error.meta.message ?? 'Login Gagal!');
       console.log(error);
     }
   };

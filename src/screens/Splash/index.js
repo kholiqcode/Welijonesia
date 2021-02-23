@@ -8,7 +8,7 @@ import { FONT_MEDIUM, FONT_REGULAR, GREEN_LIGHT, GREEN_MEDIUM, WHITE } from '../
 const Splash = ({ navigation }) => {
   useEffect(() => {
     setTimeout(() => {
-      navigation.replace('ChooseRole');
+      navigation.replace('CustomerAuth');
     }, 3000);
   }, []);
   return (

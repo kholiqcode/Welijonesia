@@ -1,5 +1,4 @@
-import React, { useRef } from 'react';
-
+import React, { useRef, useState } from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -10,9 +9,9 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useState } from 'react/cjs/react.development';
 import { ICBackActive } from '../../../assets';
 import { Gap } from '../../../components';
+import { activation, logout, resend } from '../../../services';
 import {
   boxShadow,
   FONT_BOLD,
@@ -22,11 +21,13 @@ import {
   GREEN_LIGHT,
   GREEN_MEDIUM,
   GREEN_THIN,
+  PRIMARY,
   WHITE,
 } from '../../../styles';
+import { showMessage } from '../../../utilities';
 
-const Verification = ({ navigation }) => {
-  const RESEND_OTP_TIME_LIMIT = 10;
+const Verification = ({ navigation, current }) => {
+  const RESEND_OTP_TIME_LIMIT = 120;
 
   const [pin1, setPin1] = useState('');
   const [pin2, setPin2] = useState('');
@@ -37,6 +38,63 @@ const Verification = ({ navigation }) => {
   const pin2Ref = useRef();
   const pin3Ref = useRef();
   const pin4Ref = useRef();
+
+  const _handleVerify = async () => {
+    if (pin1 === '') {
+      showMessage('Tidak boleh ada yang kosong!');
+      return pin1Ref.current.focus();
+    }
+    if (pin2 === '') {
+      showMessage('Tidak boleh ada yang kosong!');
+      return pin2Ref.current.focus();
+    }
+    if (pin3 === '') {
+      showMessage('Tidak boleh ada yang kosong!');
+      return pin3Ref.current.focus();
+    }
+    if (pin4 === '') {
+      showMessage('Tidak boleh ada yang kosong!');
+      return pin4Ref.current.focus();
+    }
+    const code = `${pin1}${pin2}${pin3}${pin4}`;
+    const [res, err] = await activation({
+      code,
+    });
+    if (res === undefined) {
+      showMessage(err.meta.message ?? 'Aktivasi Gagal!');
+    } else {
+      showMessage('Akun anda berhasil di verifikasi,silahkan Login!', 'success');
+      navigation.navigate('CustomerAuth');
+    }
+  };
+
+  const _handleResend = async () => {
+    const [res, err] = await resend({
+      via: 'email',
+    });
+    if (res === undefined) {
+      showMessage(err.meta.message ?? 'Gagal mengirim kode verifikasi!');
+    } else {
+      showMessage(res.meta.message ?? 'Kode verifikasi telah kami kirim!', 'success');
+      pin1Ref.current.focus();
+      setResendButtonDisabledTime(RESEND_OTP_TIME_LIMIT);
+      startResendOtpTimer();
+      _clearForm();
+    }
+  };
+
+  const _clearForm = () => {
+    pin1Ref.current.clear();
+    pin2Ref.current.clear();
+    pin3Ref.current.clear();
+    pin4Ref.current.clear();
+  };
+
+  const _submitListener = () => {
+    if (pin1 !== '' && pin2 !== '' && pin3 !== '' && pin4 !== '') {
+      _handleVerify();
+    }
+  };
 
   const [resendButtonDisabledTime, setResendButtonDisabledTime] = useState(RESEND_OTP_TIME_LIMIT);
 
@@ -56,35 +114,26 @@ const Verification = ({ navigation }) => {
     }, 1000);
   };
 
-  // on click of resend button
-  const onResendOtpButtonPress = () => {
-    // clear input field
-    // setValue('');
-    setResendButtonDisabledTime(RESEND_OTP_TIME_LIMIT);
-    startResendOtpTimer();
-
-    // resend OTP Api call
-    // todo
-    console.log('todo: Resend OTP');
-  };
+  React.useEffect(() => {
+    pin1Ref.current.focus();
+    return async () => {
+      await logout();
+    };
+  }, [current]);
 
   // start timer on screen on launch
   React.useEffect(() => {
     startResendOtpTimer();
-    return () => {
+    return async () => {
       if (resendOtpTimerInterval) {
         clearInterval(resendOtpTimerInterval);
       }
     };
   }, [resendButtonDisabledTime]);
 
-  const _inputNumber = (value, flag) => {
-    const completeFlag = `pin${flag}`;
-  };
-
   return (
     <LinearGradient colors={[GREEN_LIGHT, GREEN_MEDIUM]} style={styles.screen}>
-      <StatusBar translucent backgroundColor="transparent" />
+      <StatusBar showHideTransition="slide" barStyle="light-content" backgroundColor={PRIMARY} />
       <SafeAreaView>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <ICBackActive height="30" width="30" />
@@ -127,10 +176,11 @@ const Verification = ({ navigation }) => {
             onChangeText={(value) => {
               setPin1(value);
               if (pin1 !== undefined) pin2Ref.current.focus();
+              _submitListener();
             }}
-            onKeyPress={({ nativeEvent }) => {
-              nativeEvent.key === 'Backspace' && pin1Ref.current.blur(); // do action : //other action
-            }}
+            onKeyPress={({ nativeEvent }) =>
+              nativeEvent.key === 'Backspace' && pin1Ref.current.blur()
+            }
           />
           <TextInput
             style={{
@@ -150,10 +200,11 @@ const Verification = ({ navigation }) => {
             onChangeText={(value) => {
               setPin2(value);
               if (pin2 !== undefined) pin3Ref.current.focus();
+              _submitListener();
             }}
-            onKeyPress={({ nativeEvent }) => {
-              nativeEvent.key === 'Backspace' && pin1Ref.current.focus(); // do action : //other action
-            }}
+            onKeyPress={({ nativeEvent }) =>
+              nativeEvent.key === 'Backspace' && pin1Ref.current.focus()
+            }
           />
           <TextInput
             style={{
@@ -173,10 +224,11 @@ const Verification = ({ navigation }) => {
             onChangeText={(value) => {
               setPin3(value);
               if (pin3 !== undefined) pin4Ref.current.focus();
+              _submitListener();
             }}
-            onKeyPress={({ nativeEvent }) => {
-              nativeEvent.key === 'Backspace' && pin2Ref.current.focus(); // do action : //other action
-            }}
+            onKeyPress={({ nativeEvent }) =>
+              nativeEvent.key === 'Backspace' && pin2Ref.current.focus()
+            }
           />
           <TextInput
             style={{
@@ -196,10 +248,11 @@ const Verification = ({ navigation }) => {
             onChangeText={(value) => {
               setPin4(value);
               if (pin4 !== undefined) pin4Ref.current.blur();
+              _submitListener();
             }}
-            onKeyPress={({ nativeEvent }) => {
-              nativeEvent.key === 'Backspace' && pin3Ref.current.focus(); // do action : //other action
-            }}
+            onKeyPress={({ nativeEvent }) =>
+              nativeEvent.key === 'Backspace' && pin3Ref.current.focus()
+            }
           />
         </View>
         <Gap height={30} />
@@ -212,7 +265,7 @@ const Verification = ({ navigation }) => {
         ) : (
           <TouchableOpacity
             style={{ justifyContent: 'center', alignItems: 'center' }}
-            onPress={() => onResendOtpButtonPress()}
+            onPress={() => _handleResend()}
           >
             <Text style={{ textAlign: 'center', ...FONT_MEDIUM(18), color: GREEN_THIN }}>
               KIRIM ULANG
@@ -229,7 +282,7 @@ const Verification = ({ navigation }) => {
             marginHorizontal: 50,
             borderRadius: 10,
           }}
-          onPress={() => onResendOtpButtonPress()}
+          onPress={() => _handleVerify()}
         >
           <Text style={{ color: GREEN_DARK, ...FONT_BOLD(18), textAlign: 'center' }}>SUBMIT</Text>
         </TouchableOpacity>
@@ -252,7 +305,7 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
     justifyContent: 'center',
     alignItems: 'center',
-    top: 10 + StatusBar.currentHeight,
+    top: 10,
     left: 10,
     ...boxShadow(GRAY_DARK, { height: 2, width: 2 }, 5, 1),
   },

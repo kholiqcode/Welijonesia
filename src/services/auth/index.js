@@ -1,6 +1,6 @@
 import API from '../../configs/api';
 import { setLoading, store } from '../../modules/redux';
-import { getData, handleAsync, showMessage, storeData } from '../../utilities';
+import { getData, handleAsync, storeData } from '../../utilities';
 
 const { dispatch } = store;
 
@@ -12,10 +12,9 @@ export const login = async (payload = {}) => {
   const [res, err] = await handleAsync(API.customer.login({ params: payload }));
   dispatch(setLoading(false));
   if (err) throw err;
-  const { meta, data } = res;
+  const { data } = res;
   const token = `Bearer ${res.data.token}`;
-  storeData('token', { value: token });
-  showMessage(meta.message, 'success');
+  storeData('TOKEN', { value: token });
   return data;
 };
 
@@ -26,12 +25,50 @@ export const register = async (payload = {}) => {
   dispatch(setLoading(true));
   const [res, err] = await handleAsync(API.customer.register({ params: payload }));
   dispatch(setLoading(false));
-  if (err) return showMessage(err.meta.message ?? 'Registrasi Gagal');
-  const { meta, data } = res;
+  if (err) throw err;
+  const { data } = res;
+  console.log(data);
   const token = `Bearer ${res.data.token}`;
-  storeData('token', { value: token });
-  showMessage(meta.message, 'success');
+  storeData('TOKEN', { value: token });
   return data;
+};
+
+/**
+ * a Service for activation
+ */
+export const activation = async (payload = {}) => {
+  dispatch(setLoading(true));
+  return getData('TOKEN').then(async (resToken) => {
+    const [res, err] = await handleAsync(
+      API.customer.activation({
+        headers: {
+          Authorization: resToken.value,
+        },
+        params: payload,
+      }),
+    );
+    dispatch(setLoading(false));
+    return [res, err];
+  });
+};
+
+/**
+ * a Service for resend activation
+ */
+export const resend = async (payload = {}) => {
+  dispatch(setLoading(true));
+  return getData('TOKEN').then(async (resToken) => {
+    const [res, err] = await handleAsync(
+      API.customer.resend({
+        headers: {
+          Authorization: resToken.value,
+        },
+        params: payload,
+      }),
+    );
+    dispatch(setLoading(false));
+    return [res, err];
+  });
 };
 
 /**
@@ -39,7 +76,7 @@ export const register = async (payload = {}) => {
  */
 export const logout = async () => {
   dispatch(setLoading(true));
-  getData('token').then(async (resToken) => {
+  return getData('TOKEN').then(async (resToken) => {
     const [res, err] = await handleAsync(
       API.customer.logout({
         headers: {
@@ -48,9 +85,6 @@ export const logout = async () => {
       }),
     );
     dispatch(setLoading(false));
-    if (err) return showMessage(err.meta.message ?? 'Terjadi Kesalahan');
-    const { meta, data } = res;
-    showMessage(meta.message, 'success');
-    return data;
+    return [res, err];
   });
 };

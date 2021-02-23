@@ -1,5 +1,5 @@
 import { CardStyleInterpolators } from '@react-navigation/stack';
-import { Splash, ChooseRole, CustomerAuth } from '../screens';
+import { CustomerAuth, Splash } from '../screens';
 import Verification from '../screens/Auth/CustomerAuth/Verification';
 
 // const forFade = ({ current }) => ({
@@ -28,14 +28,6 @@ const authRoutes = [
   {
     name: 'Splash',
     component: Splash,
-    options: {
-      headerShown: false,
-      cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid,
-    },
-  },
-  {
-    name: 'ChooseRole',
-    component: ChooseRole,
     options: {
       headerShown: false,
       cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid,
