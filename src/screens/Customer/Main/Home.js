@@ -1,17 +1,22 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import BottomSheet from 'reanimated-bottom-sheet';
-import { Gap } from '../../../components';
-import { CardSeller, Filter, Header } from '../../../components/molecules';
+import { CardSeller, Filter, Gap, Header } from '../../../components';
+import { getSeller } from '../../../services';
 import { FONT_MEDIUM, GRAY_LIGHT, GRAY_MEDIUM, GRAY_THIN, WHITE } from '../../../styles';
 
 const Home = ({ navigation }) => {
-  const [seller, setSeller] = useState([0, 1, 2, 3, 4, 5]);
+  const [seller, setSeller] = useState([]);
   const [selectRute, setSelectRute] = useState(false);
   const [selectType, setSelectType] = useState(false);
+  const [tipe, setTipe] = useState('campuran');
+  const [rute, setRute] = useState('');
+  const [pageCurrent, setPageCurrent] = useState(1);
   const sheetRef = React.useRef(null);
   const tabBarHeight = useBottomTabBarHeight();
+  const { isLoading } = useSelector((state) => state.globalReducer);
 
   const handleSelectType = () => {
     setSelectType(true);
@@ -23,12 +28,33 @@ const Home = ({ navigation }) => {
     sheetRef.current.snapTo(0);
   };
 
+  const _handleGetSeller = async () => {
+    console.log(tipe);
+    const [res, err] = await getSeller({ page: pageCurrent, type: tipe });
+    if (res === undefined) return console.log('Tidak ada data');
+    setSeller((seller) => [...seller, ...res.data.seller.data]);
+    setPageCurrent(pageCurrent + 1);
+  };
+
+  const _onSelectType = (type) => {
+    setTipe(type);
+    console.log(type);
+    sheetRef.current.snapTo(1);
+    setSeller([]);
+    setPageCurrent(1);
+  };
+
+  useEffect(() => {
+    _handleGetSeller();
+    return () => _handleGetSeller();
+  }, [tipe]);
+
   const renderContent = () => (
     <View
       style={{
         backgroundColor: WHITE,
         padding: 16,
-        height: windowHeight * 0.8,
+        height: windowHeight,
         borderLeftWidth: 1,
         borderRightWidth: 1,
         borderLeftColor: GRAY_LIGHT,
@@ -42,9 +68,9 @@ const Home = ({ navigation }) => {
           borderBottomWidth: 1,
           borderBottomColor: GRAY_THIN,
         }}
-        onPress={() => sheetRef.current.snapTo(1)}
+        onPress={() => _onSelectType('campuran')}
       >
-        <Text style={{ ...FONT_MEDIUM(14) }}>Laki-Laki</Text>
+        <Text style={{ ...FONT_MEDIUM(14) }}>Campuran</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={{
@@ -53,9 +79,20 @@ const Home = ({ navigation }) => {
           borderBottomWidth: 1,
           borderBottomColor: GRAY_THIN,
         }}
-        onPress={() => sheetRef.current.snapTo(1)}
+        onPress={() => _onSelectType('keliling')}
       >
-        <Text style={{ ...FONT_MEDIUM(14) }}>Perempuan</Text>
+        <Text style={{ ...FONT_MEDIUM(14) }}>Keliling</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          padding: 10,
+          alignItems: 'center',
+          borderBottomWidth: 1,
+          borderBottomColor: GRAY_THIN,
+        }}
+        onPress={() => _onSelectType('mangkal')}
+      >
+        <Text style={{ ...FONT_MEDIUM(14) }}>Mangkal</Text>
       </TouchableOpacity>
       <Gap height={tabBarHeight} />
     </View>
@@ -82,30 +119,37 @@ const Home = ({ navigation }) => {
       <View style={{ width: '20%', height: 3, backgroundColor: GRAY_MEDIUM, borderRadius: 5 }} />
     </View>
   );
+
   return (
     <View style={styles.container}>
       <Header />
       <FlatList
-        // onRefresh={() => console.log('refresh')}
-        // refreshing
+        onRefresh={() => _handleGetSeller()}
+        refreshing={isLoading}
         keyboardDismissMode="interactive"
         showsVerticalScrollIndicator={false}
         data={seller}
         numColumns={2}
         ListHeaderComponent={() => (
-          <Filter onPressType={handleSelectType} onPressRute={handleSelectRute} />
+          <Filter
+            typePlaceholder={tipe}
+            onPressType={handleSelectType}
+            onPressRute={handleSelectRute}
+          />
         )}
         stickyHeaderIndices={[0]}
         columnWrapperStyle={styles.columnWrapper}
         contentContainerStyle={{ paddingBottom: tabBarHeight }}
-        renderItem={({ item, index }) => (
-          <CardSeller onPress={() => navigation.navigate('SellerDetail')} />
+        renderItem={({ item }) => (
+          <CardSeller seller={item} onPress={() => navigation.navigate('SellerDetail')} />
         )}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.id.toString()}
+        onEndReached={() => _handleGetSeller()}
+        onEndReachedThreshold={0.1}
       />
       <BottomSheet
         ref={sheetRef}
-        snapPoints={['35%', 0, '81%']}
+        snapPoints={['50%', 0, '81%']}
         renderContent={renderContent}
         renderHeader={renderHeader}
         enabledInnerScrolling={false}

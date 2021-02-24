@@ -3,11 +3,11 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { boxShadow, GRAY_DARK, GRAY_MEDIUM, WHITE } from '../../../styles';
 import { Gap, Input } from '../../atoms';
 
-const Filter = ({ onPressType, onPressRute }) => (
+const Filter = ({ onPressType, onPressRute, typePlaceholder }) => (
   <View style={styles.container}>
     <TouchableOpacity style={styles.selectType} onPress={() => onPressType()}>
       <Input
-        placeholder="Keliling"
+        placeholder={typePlaceholder}
         select
         rightIcon
         disable

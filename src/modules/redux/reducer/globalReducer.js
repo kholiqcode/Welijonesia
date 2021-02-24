@@ -1,7 +1,7 @@
 const inititalStateGlobal = {
-  isError: false,
-  message: 'Error',
   isLoading: false,
+  isError: false,
+  isLogged: false,
 };
 
 const globalReducer = (state = inititalStateGlobal, action) => {
@@ -16,6 +16,11 @@ const globalReducer = (state = inititalStateGlobal, action) => {
       return {
         ...state,
         isLoading: action.value,
+      };
+    case 'SET_LOGGED':
+      return {
+        ...state,
+        isLogged: action.value,
       };
 
     default:

@@ -1,29 +1,29 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ILNoPhoto } from '../../../assets';
-import { FONT_MEDIUM, FONT_REGULAR, PRIMARY, RED, scaleSize, WHITE } from '../../../styles';
+import { FONT_MEDIUM, FONT_REGULAR, PRIMARY, RED, WHITE } from '../../../styles';
 import { Gap } from '../../atoms';
 
-const CardSeller = ({ onPress }) => (
-  <TouchableOpacity style={styles.container} onPress={onPress} delayPressOut={0} delayPressIn={0}>
-    <View style={styles.topLabel}>
-      <Text style={styles.typeSeller} numberOfLines={1}>
-        Keliling
+const CardSeller = ({ seller, onPress }) => {
+  const { type, name, picturePath, rutedetails } = seller;
+  const rute = rutedetails.map((item) => item.rute.name);
+  return (
+    <TouchableOpacity style={styles.container} onPress={onPress} delayPressOut={0} delayPressIn={0}>
+      <View style={styles.topLabel}>
+        <Text style={styles.typeSeller} numberOfLines={1}>
+          {type}
+        </Text>
+      </View>
+      <Gap height={20} />
+      <View style={styles.imageWrapper}>
+        <Image source={{ uri: picturePath }} style={styles.sellerImage} />
+      </View>
+      <Text style={styles.sellerName}>{name}</Text>
+      <Text style={styles.sellerAddress} numberOfLines={2} ellipsizeMode="tail">
+        {rute.join(' => ')}
       </Text>
-    </View>
-    <Gap height={12} />
-    <View style={styles.imageWrapper}>
-      <Image source={ILNoPhoto} style={styles.sellerImage} />
-    </View>
-    <Text style={styles.sellerName}>Sugiono</Text>
-
-    <Gap height={10} />
-    <Text style={styles.sellerAddress} numberOfLines={2} ellipsizeMode="tail">
-      {/* {rute.join(' => ')} */}
-      Perum Mastrip - Cluster Tidar - Bunga NirwanaPerum Mastrip - Cluster Tidar - Bunga Nirwana
-    </Text>
-  </TouchableOpacity>
-);
+    </TouchableOpacity>
+  );
+};
 
 export default CardSeller;
 
@@ -38,10 +38,11 @@ const styles = StyleSheet.create({
   imageWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 5,
   },
   sellerImage: {
-    maxHeight: scaleSize(120),
-    maxWidth: scaleSize(120),
+    width: '100%',
+    aspectRatio: 1,
   },
   typeSeller: {
     color: WHITE,

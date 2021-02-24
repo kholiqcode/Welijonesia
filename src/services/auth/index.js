@@ -1,5 +1,5 @@
 import API from '../../configs/api';
-import { setLoading, store } from '../../modules/redux';
+import { setLoading, setLogged, store } from '../../modules/redux';
 import { getData, handleAsync, storeData } from '../../utilities';
 
 const { dispatch } = store;
@@ -15,6 +15,7 @@ export const login = async (payload = {}) => {
   const { data } = res;
   const token = `Bearer ${res.data.token}`;
   storeData('TOKEN', { value: token });
+  dispatch(setLogged(true));
   return data;
 };
 

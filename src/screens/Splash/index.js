@@ -2,13 +2,20 @@ import React, { useEffect } from 'react';
 
 import { Image, StyleSheet, Text } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { useSelector } from 'react-redux';
 import { ILLogo } from '../../assets';
 import { FONT_MEDIUM, FONT_REGULAR, GREEN_LIGHT, GREEN_MEDIUM, WHITE } from '../../styles';
 
 const Splash = ({ navigation }) => {
+  const { isLogged } = useSelector((state) => state.globalReducer);
   useEffect(() => {
     setTimeout(() => {
-      navigation.replace('CustomerAuth');
+      console.log(isLogged);
+      if (isLogged) {
+        navigation.replace('CustomerMainScreen');
+      } else {
+        navigation.replace('CustomerAuth');
+      }
     }, 3000);
   }, []);
   return (
