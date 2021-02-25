@@ -1,21 +1,33 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import React, { useState } from 'react';
-import { Image, Keyboard, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  FlatList,
+  Image,
+  Keyboard,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { useSelector } from 'react-redux';
 import BottomSheet from 'reanimated-bottom-sheet';
-import { ICBackActive, ILNoPhoto } from '../../../assets';
-import { Button, Gap, Header } from '../../../components';
+import { ICBackActive } from '../../../assets';
+import { Button, Gap } from '../../../components';
+import { getReview, getSeller, storeOrUpdate } from '../../../services';
 import {
   boxShadow,
   FONT_MEDIUM,
   FONT_REGULAR,
   GRAY_DARK,
+  GRAY_LIGHT,
+  GRAY_MEDIUM,
   GRAY_THIN,
   PRIMARY,
-  WHITE,
   RED,
-  GRAY_LIGHT,
   scaleSize,
-  GRAY_MEDIUM,
+  WHITE,
 } from '../../../styles';
 import SellerInfo from './SellerInfo';
 import SellerProduct from './SellerProduct';
@@ -45,9 +57,48 @@ const TopTabSeller = (props) => {
   );
 };
 
-const SellerDetail = ({ navigation }) => {
+const SellerDetail = ({ navigation, route }) => {
   const [isFavorit, setIsFavorit] = useState(false);
+  const [seller, setSeller] = useState([]);
   const sheetRef = React.useRef(null);
+  const [countFavorit, setCountFavorit] = useState(0);
+  const { isLoading } = useSelector((state) => state.globalReducer);
+  const [pageCurrent, setPageCurrent] = useState(1);
+  const [review, setReview] = useState([]);
+  const [lastPage, setLastPage] = useState(100);
+  const { id } = route.params;
+
+  const _handleGetReview = async () => {
+    if (pageCurrent > lastPage) return null;
+    const [res, err] = await getReview({ page: pageCurrent, seller_id: id });
+    if (err) {
+      return setLastPage(pageCurrent + 1);
+    }
+    setReview((review) => [...review, ...res.data.review.data]);
+    setPageCurrent(pageCurrent + 1);
+    setLastPage(res.data.review.last_page ?? pageCurrent + 1);
+  };
+
+  const _handleUpdateFavorit = async () => {
+    setIsFavorit(!isFavorit);
+    const [res, err] = await storeOrUpdate({ seller_id: id });
+    if (err) return console.log('Gagal update Favorit');
+    console.log(res.meta.message);
+    setCountFavorit(res.data.countFavorit);
+  };
+
+  const _handleGetSeller = async () => {
+    const [res, err] = await getSeller({ id });
+    if (err !== undefined) return console.log('Tidak ada data');
+    // console.log(res.data.seller);
+    setSeller(res.data.seller);
+    setCountFavorit(res.data.seller.favorit);
+  };
+
+  useEffect(() => {
+    _handleGetSeller();
+    _handleGetReview();
+  }, []);
 
   const renderContent = () => (
     <View
@@ -112,56 +163,62 @@ const SellerDetail = ({ navigation }) => {
       <View style={styles.container} onStartShouldSetResponder={() => Keyboard.dismiss()}>
         {/* <Header /> */}
         <View style={styles.content}>
-          <View style={styles.navigationWrapper}>
-            <Button btnIcon="chat-white" />
-            <Gap width={10} />
-            {isFavorit ? (
-              <Button btnIcon="favoritActive" onPress={() => setIsFavorit(!isFavorit)} />
-            ) : (
-              <Button btnIcon="favorit" onPress={() => setIsFavorit(!isFavorit)} />
-            )}
-          </View>
-          <Gap height={15} />
-          <View style={styles.sellerDetail}>
-            <View style={styles.sellerPhotoWrapper}>
-              <Image source={ILNoPhoto} style={styles.sellerPhoto} />
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={isLoading} onRefresh={() => _handleGetSeller()} />
+            }
+          >
+            <View style={styles.navigationWrapper}>
+              <Button btnIcon="chat-white" />
+              <Gap width={10} />
+              <Button
+                btnIcon={isFavorit ? 'favoritActive' : 'favorit'}
+                onPress={() => _handleUpdateFavorit()}
+              />
             </View>
-            <Gap width={20} />
-            <View>
-              <Text style={styles.sellerName}>Lijo Kholiq</Text>
-              <Gap height={5} />
-              <Text
-                style={{
-                  ...FONT_REGULAR(12),
-                  color: RED,
-                  paddingHorizontal: 3,
-                  backgroundColor: WHITE,
-                  borderRadius: 30,
-                  textAlign: 'center',
-                  textAlignVertical: 'center',
-                }}
-              >
-                Tutup
-              </Text>
+            <Gap height={15} />
+            <View style={styles.sellerDetail}>
+              <View style={styles.sellerPhotoWrapper}>
+                <Image source={{ uri: seller.picturePath }} style={styles.sellerPhoto} />
+              </View>
+              <Gap width={20} />
+              <View style={{ flexShrink: 1 }}>
+                <Text style={styles.sellerName} ellipsizeMode="tail" numberOfLines={1}>
+                  {seller.name}
+                </Text>
+                <Gap height={5} />
+                <Text
+                  style={{
+                    ...FONT_REGULAR(12),
+                    color: RED,
+                    paddingHorizontal: 20,
+                    backgroundColor: WHITE,
+                    borderRadius: 30,
+                    textAlign: 'center',
+                    textAlignVertical: 'center',
+                    alignSelf: 'flex-start',
+                  }}
+                >
+                  {seller.active ? 'Buka' : 'Tutup'}
+                </Text>
+              </View>
             </View>
-          </View>
-          <View style={styles.sellerInfo}>
-            <View style={styles.itemSellerInfo}>
-              <Text style={styles.infoValue}>0.0/5.0</Text>
-              <Text style={styles.infoDesc}>Dari Pembeli</Text>
+            <View style={styles.sellerInfo}>
+              <View style={styles.itemSellerInfo}>
+                <Text style={styles.infoValue}>{seller.rate}/5</Text>
+                <Text style={styles.infoDesc}>Dari Pembeli</Text>
+              </View>
+              <Gap style={styles.border} />
+              <View style={styles.itemSellerInfo}>
+                <Text style={styles.infoValue}>{countFavorit}</Text>
+                <Text style={styles.infoDesc}>Menyukai</Text>
+              </View>
             </View>
-            <Gap style={styles.border} />
-            <View style={styles.itemSellerInfo}>
-              <Text style={styles.infoValue}>100</Text>
-              <Text style={styles.infoDesc}>Menyuukai</Text>
-            </View>
-          </View>
-          <Gap height={10} />
-          <View style={styles.topTabWrapper}>
-            <TopTabSeller onBottomSheet />
-          </View>
+          </ScrollView>
         </View>
-
+        <View style={styles.topTabWrapper}>
+          <TopTabSeller onBottomSheet review={review} route={route} />
+        </View>
         <BottomSheet
           ref={sheetRef}
           snapPoints={['100%', 0]}
@@ -182,12 +239,11 @@ export default SellerDetail;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: PRIMARY,
   },
   content: {
     paddingHorizontal: 10,
     paddingTop: 15,
-    backgroundColor: PRIMARY,
-    flex: 1,
   },
   backButton: {
     position: 'absolute',
@@ -217,6 +273,7 @@ const styles = StyleSheet.create({
   sellerPhoto: {
     height: 100,
     width: 100,
+    resizeMode: 'cover',
     borderRadius: 100 / 2,
   },
   sellerDetail: {

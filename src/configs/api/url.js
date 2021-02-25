@@ -10,6 +10,8 @@ const baseUrl = {
     activation: `${config.url.api}/customer/verification`,
     resend: `${config.url.api}/customer/resend`,
     seller: `${config.url.api}/customer/seller`,
+    review: `${config.url.api}/customer/review`,
+    favorit: `${config.url.api}/customer/favorit`,
   },
 };
 

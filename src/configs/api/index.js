@@ -11,6 +11,8 @@ API.customer = {
   activation: ApiRequest.post(baseUrl.customer.activation),
   resend: ApiRequest.post(baseUrl.customer.resend),
   getSeller: ApiRequest.get(baseUrl.customer.seller),
+  getReview: ApiRequest.get(baseUrl.customer.review),
+  storeOrUpdateFavorit: ApiRequest.post(baseUrl.customer.favorit),
 };
 
 export default API;

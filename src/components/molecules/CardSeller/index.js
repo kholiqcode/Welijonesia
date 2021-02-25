@@ -1,7 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { FONT_MEDIUM, FONT_REGULAR, PRIMARY, RED, WHITE } from '../../../styles';
-import { Gap } from '../../atoms';
 
 const CardSeller = ({ seller, onPress }) => {
   const { type, name, picturePath, rutedetails } = seller;
@@ -13,14 +12,17 @@ const CardSeller = ({ seller, onPress }) => {
           {type}
         </Text>
       </View>
-      <Gap height={20} />
       <View style={styles.imageWrapper}>
         <Image source={{ uri: picturePath }} style={styles.sellerImage} />
       </View>
-      <Text style={styles.sellerName}>{name}</Text>
-      <Text style={styles.sellerAddress} numberOfLines={2} ellipsizeMode="tail">
-        {rute.join(' => ')}
-      </Text>
+      <View style={{ paddingHorizontal: 10 }}>
+        <Text style={styles.sellerName} numberOfLines={2}>
+          {name}
+        </Text>
+        <Text style={styles.sellerAddress} numberOfLines={2} ellipsizeMode="tail">
+          {rute.join(' => ')}
+        </Text>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -32,17 +34,21 @@ const styles = StyleSheet.create({
     width: '48%',
     backgroundColor: WHITE,
     marginTop: 5,
-    padding: 10,
+    // padding: 10,
     borderRadius: 10 / 2,
   },
   imageWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 5,
+    borderTopRightRadius: 10 / 2,
+    borderTopLeftRadius: 10 / 2,
   },
   sellerImage: {
     width: '100%',
     aspectRatio: 1,
+    borderTopRightRadius: 10 / 2,
+    borderTopLeftRadius: 10 / 2,
   },
   typeSeller: {
     color: WHITE,
@@ -63,5 +69,6 @@ const styles = StyleSheet.create({
     padding: 3,
     borderBottomRightRadius: 10 / 2,
     borderTopLeftRadius: 10 / 2,
+    zIndex: 999,
   },
 });

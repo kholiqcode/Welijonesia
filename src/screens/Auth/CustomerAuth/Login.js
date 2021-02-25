@@ -1,5 +1,7 @@
-import React, { createRef, useState } from 'react';
+import React, { createRef, useState, useEffect } from 'react';
+
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import SmsRetriever from 'react-native-sms-retriever';
 import { ICBackCircle } from '../../../assets';
 import { Button, Gap, Input } from '../../../components';
 import { login } from '../../../services';
@@ -12,6 +14,26 @@ const Login = ({ handleSetForgot, navigation }) => {
   const [password, setPassword] = useState('');
   const emailRef = createRef();
   const passwordRef = createRef();
+
+  // Get the SMS message (second gif)
+  const _onSmsListenerPressed = async () => {
+    try {
+      const registered = await SmsRetriever.startSmsRetriever();
+      console.log(registered);
+      if (registered) {
+        SmsRetriever.addSmsListener((event) => {
+          console.log(event);
+          SmsRetriever.removeSmsListener();
+        });
+      }
+    } catch (error) {
+      console.log(JSON.stringify(error));
+    }
+  };
+
+  useEffect(() => {
+    // _onSmsListenerPressed();
+  }, []);
 
   const _handleLogin = async () => {
     if (email === '') {
@@ -34,6 +56,7 @@ const Login = ({ handleSetForgot, navigation }) => {
       console.log(error);
     }
   };
+
   return (
     <View style={styles.container}>
       <View style={{ justifyContent: 'center', flex: 1 }}>
@@ -70,7 +93,7 @@ const Login = ({ handleSetForgot, navigation }) => {
         <Gap height={30} />
         <Button text="MASUK" onPress={() => _handleLogin()} />
         <Gap height={30} />
-        <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => _onSmsListenerPressed()}>
           <ICBackCircle height={50} width={50} />
         </TouchableOpacity>
       </View>

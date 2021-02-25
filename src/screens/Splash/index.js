@@ -5,17 +5,19 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useSelector } from 'react-redux';
 import { ILLogo } from '../../assets';
 import { FONT_MEDIUM, FONT_REGULAR, GREEN_LIGHT, GREEN_MEDIUM, WHITE } from '../../styles';
+import { getData } from '../../utilities';
 
 const Splash = ({ navigation }) => {
   const { isLogged } = useSelector((state) => state.globalReducer);
   useEffect(() => {
     setTimeout(() => {
-      console.log(isLogged);
-      if (isLogged) {
-        navigation.replace('CustomerMainScreen');
-      } else {
-        navigation.replace('CustomerAuth');
-      }
+      getData('TOKEN').then((res) => {
+        if (res.value) {
+          navigation.reset({ index: 0, routes: [{ name: 'CustomerMainScreen' }] });
+        } else {
+          navigation.replace('CustomerAuth');
+        }
+      });
     }, 3000);
   }, []);
   return (

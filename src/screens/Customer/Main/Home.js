@@ -12,8 +12,8 @@ const Home = ({ navigation }) => {
   const [selectRute, setSelectRute] = useState(false);
   const [selectType, setSelectType] = useState(false);
   const [tipe, setTipe] = useState('campuran');
-  const [rute, setRute] = useState('');
   const [pageCurrent, setPageCurrent] = useState(1);
+  const [lastPage, setLastPage] = useState(100);
   const sheetRef = React.useRef(null);
   const tabBarHeight = useBottomTabBarHeight();
   const { isLoading } = useSelector((state) => state.globalReducer);
@@ -29,11 +29,13 @@ const Home = ({ navigation }) => {
   };
 
   const _handleGetSeller = async () => {
+    if (pageCurrent > lastPage) return null;
     console.log(tipe);
     const [res, err] = await getSeller({ page: pageCurrent, type: tipe });
     if (res === undefined) return console.log('Tidak ada data');
     setSeller((seller) => [...seller, ...res.data.seller.data]);
     setPageCurrent(pageCurrent + 1);
+    setLastPage(res.data.seller.last_page ?? 100);
   };
 
   const _onSelectType = (type) => {
@@ -130,18 +132,18 @@ const Home = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         data={seller}
         numColumns={2}
-        ListHeaderComponent={() => (
-          <Filter
-            typePlaceholder={tipe}
-            onPressType={handleSelectType}
-            onPressRute={handleSelectRute}
-          />
-        )}
-        stickyHeaderIndices={[0]}
+        // ListHeaderComponent={() => (
+        //   <Filter
+        //     typePlaceholder={tipe}
+        //     onPressType={handleSelectType}
+        //     onPressRute={handleSelectRute}
+        //   />
+        // )}
+        // stickyHeaderIndices={[0]}
         columnWrapperStyle={styles.columnWrapper}
         contentContainerStyle={{ paddingBottom: tabBarHeight }}
         renderItem={({ item }) => (
-          <CardSeller seller={item} onPress={() => navigation.navigate('SellerDetail')} />
+          <CardSeller seller={item} onPress={() => navigation.navigate('SellerDetail', item)} />
         )}
         keyExtractor={(item) => item.id.toString()}
         onEndReached={() => _handleGetSeller()}
