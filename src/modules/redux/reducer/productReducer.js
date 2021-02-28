@@ -15,6 +15,11 @@ export const productReducer = (state = inititalReview, action) => {
         ...state,
         product: action.value,
       };
+    case 'RESET_PRODUCT':
+      return {
+        products: [],
+        product: [],
+      };
 
     default:
       return {

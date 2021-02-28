@@ -28,7 +28,6 @@ export const getSellers = async (payload = {}) => {
 };
 
 export const getSeller = async (payload = {}) => {
-  dispatch(setLoading(true));
   console.log(payload);
   const [res, err] = await handleAsync(
     API.customer.getSeller({
@@ -37,5 +36,4 @@ export const getSeller = async (payload = {}) => {
   );
   if (err) throw err;
   dispatch(setSeller(res.data.seller));
-  dispatch(setLoading(false));
 };

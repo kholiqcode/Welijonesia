@@ -1,16 +1,28 @@
 import moment from 'moment';
 import indonesianLocale from 'moment/locale/id';
-import React, { memo, useMemo } from 'react';
+import React, { memo, useCallback, useEffect, useMemo } from 'react';
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import { Rating } from 'react-native-ratings';
+import { useSelector } from 'react-redux';
 import { ILNoPhoto } from '../../../assets';
 import { Button, Gap } from '../../../components';
+import { getReviews } from '../../../services';
 import { FONT_BOLD, FONT_MEDIUM, FONT_REGULAR, SECONDARY, WHITE } from '../../../styles';
 
-const SellerInfo = ({ route, review }) => {
-  const { type, rutedetails, user } = route.params;
+const SellerInfo = ({ route }) => {
+  const { type, rutedetails, user, id } = route.params;
   const rute = useMemo(() => rutedetails.map((item) => item.rute.name), rutedetails);
-  // console.log('render seller info');
+  const { reviews } = useSelector((state) => state.reviewReducer);
+  const { currentPage, lastPage } = useSelector((state) => state.globalReducer);
+
+  const _handleGetReview = useCallback(async () => {
+    if (currentPage === lastPage) return null;
+    await getReviews({ page: currentPage, seller_id: id });
+  }, [reviews]);
+
+  useEffect(() => {
+    _handleGetReview();
+  }, [id]);
 
   return (
     <View style={styles.container}>
@@ -58,7 +70,7 @@ const SellerInfo = ({ route, review }) => {
         keyExtractor={(item, index) => index.toString()}
         stickyHeaderIndices={[0]}
         scrollEnabled
-        data={review}
+        data={reviews}
         ListHeaderComponent={() => (
           <View style={styles.ratingHeader}>
             <Text style={styles.ratingTitle}>Rating dan Ulasan</Text>

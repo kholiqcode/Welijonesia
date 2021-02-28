@@ -10,10 +10,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ICBackActive } from '../../../assets';
 import { Button, Gap } from '../../../components';
-import { getProducts, getReviews, getSeller, storeOrUpdate } from '../../../services';
+import { resetProduct } from '../../../modules';
+import { getSeller, storeOrUpdate } from '../../../services';
 import {
   boxShadow,
   FONT_MEDIUM,
@@ -59,16 +60,10 @@ const SellerDetail = ({ navigation, route }) => {
   const [isFavorit, setIsFavorit] = useState(false);
   const sheetRef = React.useRef(null);
   const [countFavorit, setCountFavorit] = useState(0);
-  const { isLoading, currentPage, lastPage } = useSelector((state) => state.globalReducer);
+  const { isLoading } = useSelector((state) => state.globalReducer);
   const { seller } = useSelector((state) => state.sellerReducer);
-  const { products } = useSelector((state) => state.productReducer);
-  const { reviews } = useSelector((state) => state.reviewReducer);
   const { id } = route.params;
-
-  const _handleGetReview = useCallback(async () => {
-    if (currentPage === lastPage) return null;
-    await getReviews({ page: currentPage, seller_id: id });
-  }, [reviews]);
+  const dispatch = useDispatch();
 
   const _handleUpdateFavorit = useCallback(async () => {
     setIsFavorit(!isFavorit);
@@ -81,19 +76,12 @@ const SellerDetail = ({ navigation, route }) => {
     await getSeller({ id });
   }, [seller]);
 
-  const _handleGetProduct = useCallback(async () => {
-    await getProducts({ seller_id: id });
-    console.log(products);
-  }, [products]);
-
   useEffect(() => {
-    if (id) {
-      _handleGetSeller();
-      _handleGetProduct();
-      _handleGetReview();
-    } else {
-      navigation.goBack();
-    }
+    _handleGetSeller();
+    return () => {
+      dispatch(resetProduct());
+      console.log('did unmount');
+    };
   }, [id]);
 
   const renderContent = () => (
@@ -154,6 +142,7 @@ const SellerDetail = ({ navigation, route }) => {
       <View style={{ width: '20%', height: 3, backgroundColor: GRAY_MEDIUM, borderRadius: 5 }} />
     </View>
   );
+  if (isLoading) return <Text>Loading</Text>;
   return (
     <>
       <View style={styles.container} onStartShouldSetResponder={() => Keyboard.dismiss()}>
@@ -213,7 +202,7 @@ const SellerDetail = ({ navigation, route }) => {
           </ScrollView>
         </View>
         <View style={styles.topTabWrapper}>
-          <TopTabSeller onBottomSheet review={reviews} product={products} route={route} />
+          <TopTabSeller onBottomSheet route={route} />
         </View>
         {/* <BottomSheet
           ref={sheetRef}

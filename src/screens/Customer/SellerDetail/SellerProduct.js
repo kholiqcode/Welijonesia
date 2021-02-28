@@ -1,7 +1,9 @@
-import React, { useState, useRef, memo } from 'react';
+import React, { useState, useRef, memo, useCallback, useEffect } from 'react';
 
 import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import { CardProduct, Gap } from '../../../components';
+import { getProducts } from '../../../services';
 import { FONT_MEDIUM, GRAY_THIN, PRIMARY, SECONDARY, WHITE } from '../../../styles';
 
 const LabelCategory = ({ category }) => {
@@ -55,8 +57,15 @@ const HeaderCategory = () => {
   );
 };
 
-const SellerProduct = ({ product }) => {
-  console.log('render product info');
+const SellerProduct = ({ route }) => {
+  const { id } = route.params;
+  const { products } = useSelector((state) => state.productReducer);
+  const _handleGetProduct = useCallback(async () => {
+    await getProducts({ seller_id: id });
+  }, [products]);
+  useEffect(() => {
+    _handleGetProduct();
+  }, []);
   return (
     <View style={styles.container}>
       <FlatList
@@ -66,7 +75,7 @@ const SellerProduct = ({ product }) => {
         stickyHeaderIndices={[0]}
         scrollEnabled
         numColumns={2}
-        data={product}
+        data={products}
         ListHeaderComponentStyle={{ paddingHorizontal: 10 }}
         columnWrapperStyle={{
           justifyContent: 'space-between',
