@@ -1,7 +1,6 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import {
-  FlatList,
   Image,
   Keyboard,
   RefreshControl,
@@ -12,10 +11,9 @@ import {
   View,
 } from 'react-native';
 import { useSelector } from 'react-redux';
-import BottomSheet from 'reanimated-bottom-sheet';
 import { ICBackActive } from '../../../assets';
 import { Button, Gap } from '../../../components';
-import { getReview, getSeller, storeOrUpdate } from '../../../services';
+import { getProducts, getReviews, getSeller, storeOrUpdate } from '../../../services';
 import {
   boxShadow,
   FONT_MEDIUM,
@@ -34,8 +32,8 @@ import SellerProduct from './SellerProduct';
 
 const TopTab = createMaterialTopTabNavigator();
 const TopTabSeller = (props) => {
-  const SellerInfoTab = () => <SellerInfo {...props} />;
-  const SellerProductTab = () => <SellerProduct {...props} />;
+  const SellerInfoTab = useCallback(() => <SellerInfo {...props} />, []);
+  const SellerProductTab = useCallback(() => <SellerProduct {...props} />, []);
   return (
     <TopTab.Navigator
       tabBarOptions={{
@@ -59,46 +57,44 @@ const TopTabSeller = (props) => {
 
 const SellerDetail = ({ navigation, route }) => {
   const [isFavorit, setIsFavorit] = useState(false);
-  const [seller, setSeller] = useState([]);
   const sheetRef = React.useRef(null);
   const [countFavorit, setCountFavorit] = useState(0);
-  const { isLoading } = useSelector((state) => state.globalReducer);
-  const [pageCurrent, setPageCurrent] = useState(1);
-  const [review, setReview] = useState([]);
-  const [lastPage, setLastPage] = useState(100);
+  const { isLoading, currentPage, lastPage } = useSelector((state) => state.globalReducer);
+  const { seller } = useSelector((state) => state.sellerReducer);
+  const { products } = useSelector((state) => state.productReducer);
+  const { reviews } = useSelector((state) => state.reviewReducer);
   const { id } = route.params;
 
-  const _handleGetReview = async () => {
-    if (pageCurrent > lastPage) return null;
-    const [res, err] = await getReview({ page: pageCurrent, seller_id: id });
-    if (err) {
-      return setLastPage(pageCurrent + 1);
-    }
-    setReview((review) => [...review, ...res.data.review.data]);
-    setPageCurrent(pageCurrent + 1);
-    setLastPage(res.data.review.last_page ?? pageCurrent + 1);
-  };
+  const _handleGetReview = useCallback(async () => {
+    if (currentPage === lastPage) return null;
+    await getReviews({ page: currentPage, seller_id: id });
+  }, [reviews]);
 
-  const _handleUpdateFavorit = async () => {
+  const _handleUpdateFavorit = useCallback(async () => {
     setIsFavorit(!isFavorit);
     const [res, err] = await storeOrUpdate({ seller_id: id });
     if (err) return console.log('Gagal update Favorit');
-    console.log(res.meta.message);
     setCountFavorit(res.data.countFavorit);
-  };
+  }, [countFavorit]);
 
-  const _handleGetSeller = async () => {
-    const [res, err] = await getSeller({ id });
-    if (err !== undefined) return console.log('Tidak ada data');
-    // console.log(res.data.seller);
-    setSeller(res.data.seller);
-    setCountFavorit(res.data.seller.favorit);
-  };
+  const _handleGetSeller = useCallback(async () => {
+    await getSeller({ id });
+  }, [seller]);
+
+  const _handleGetProduct = useCallback(async () => {
+    await getProducts({ seller_id: id });
+    console.log(products);
+  }, [products]);
 
   useEffect(() => {
-    _handleGetSeller();
-    _handleGetReview();
-  }, []);
+    if (id) {
+      _handleGetSeller();
+      _handleGetProduct();
+      _handleGetReview();
+    } else {
+      navigation.goBack();
+    }
+  }, [id]);
 
   const renderContent = () => (
     <View
@@ -217,16 +213,16 @@ const SellerDetail = ({ navigation, route }) => {
           </ScrollView>
         </View>
         <View style={styles.topTabWrapper}>
-          <TopTabSeller onBottomSheet review={review} route={route} />
+          <TopTabSeller onBottomSheet review={reviews} product={products} route={route} />
         </View>
-        <BottomSheet
+        {/* <BottomSheet
           ref={sheetRef}
           snapPoints={['100%', 0]}
           renderContent={renderContent}
           renderHeader={renderHeader}
           enabledInnerScrolling={false}
           initialSnap={1}
-        />
+        /> */}
       </View>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <ICBackActive height="30" width="30" />
@@ -234,7 +230,7 @@ const SellerDetail = ({ navigation, route }) => {
     </>
   );
 };
-export default SellerDetail;
+export default memo(SellerDetail);
 
 const styles = StyleSheet.create({
   container: {

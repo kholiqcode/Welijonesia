@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, memo } from 'react';
 
 import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CardProduct, Gap } from '../../../components';
@@ -55,29 +55,33 @@ const HeaderCategory = () => {
   );
 };
 
-const SellerProduct = () => (
-  <View style={styles.container}>
-    <FlatList
-      style={{ flex: 1 }}
-      showsVerticalScrollIndicator={false}
-      keyExtractor={(item, index) => index.toString()}
-      stickyHeaderIndices={[0]}
-      scrollEnabled
-      numColumns={2}
-      data={[0, 1, 2, 3, 4, 5]}
-      ListHeaderComponentStyle={{ paddingHorizontal: 10 }}
-      columnWrapperStyle={{
-        justifyContent: 'space-between',
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-      }}
-      ListHeaderComponent={() => <HeaderCategory />}
-      renderItem={({ item }) => <CardProduct />}
-    />
-  </View>
-);
+const SellerProduct = ({ product }) => {
+  console.log('render product info');
+  return (
+    <View style={styles.container}>
+      <FlatList
+        style={{ flex: 1 }}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => item.id.toString()}
+        stickyHeaderIndices={[0]}
+        scrollEnabled
+        numColumns={2}
+        data={product}
+        ListHeaderComponentStyle={{ paddingHorizontal: 10 }}
+        columnWrapperStyle={{
+          justifyContent: 'space-between',
+          paddingHorizontal: 10,
+          paddingVertical: 5,
+        }}
+        ListHeaderComponent={() => <HeaderCategory />}
+        renderItem={({ item }) => <CardProduct product={item} />}
+        ListEmptyComponent={() => <Text>Tidak ada data</Text>}
+      />
+    </View>
+  );
+};
 
-export default SellerProduct;
+export default memo(SellerProduct);
 
 const styles = StyleSheet.create({
   container: {

@@ -1,5 +1,6 @@
 const inititalSeller = {
   seller: [],
+  sellers: [],
 };
 
 export const sellerReducer = (state = inititalSeller, action) => {
@@ -7,7 +8,12 @@ export const sellerReducer = (state = inititalSeller, action) => {
     case 'SET_SELLER':
       return {
         ...state,
-        sellers: action.value,
+        seller: action.value,
+      };
+    case 'SET_SELLERS':
+      return {
+        ...state,
+        sellers: [...state.sellers, ...action.value],
       };
 
     default:

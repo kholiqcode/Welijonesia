@@ -1,6 +1,6 @@
 import moment from 'moment';
 import indonesianLocale from 'moment/locale/id';
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { ILNoPhoto } from '../../../assets';
@@ -8,8 +8,9 @@ import { Button, Gap } from '../../../components';
 import { FONT_BOLD, FONT_MEDIUM, FONT_REGULAR, SECONDARY, WHITE } from '../../../styles';
 
 const SellerInfo = ({ route, review }) => {
-  const { id, type, rutedetails, user } = route.params;
-  const rute = rutedetails.map((item) => item.rute.name);
+  const { type, rutedetails, user } = route.params;
+  const rute = useMemo(() => rutedetails.map((item) => item.rute.name), rutedetails);
+  // console.log('render seller info');
 
   return (
     <View style={styles.container}>
@@ -103,7 +104,7 @@ const SellerInfo = ({ route, review }) => {
   );
 };
 
-export default SellerInfo;
+export default memo(SellerInfo);
 
 const styles = StyleSheet.create({
   container: {

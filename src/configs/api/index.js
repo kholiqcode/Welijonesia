@@ -12,6 +12,7 @@ API.customer = {
   resend: ApiRequest.post(baseUrl.customer.resend),
   getSeller: ApiRequest.get(baseUrl.customer.seller),
   getReview: ApiRequest.get(baseUrl.customer.review),
+  getProduct: ApiRequest.get(baseUrl.customer.product),
   storeOrUpdateFavorit: ApiRequest.post(baseUrl.customer.favorit),
 };
 

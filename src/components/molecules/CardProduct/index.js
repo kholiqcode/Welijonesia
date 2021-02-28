@@ -3,10 +3,22 @@ import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ILNoPhoto } from '../../../assets';
 import { FONT_MEDIUM, FONT_REGULAR, PRIMARY, SECONDARY, WHITE } from '../../../styles';
+import { convertCurrency } from '../../../utilities';
 import { Gap } from '../../atoms';
 
-const CardProduct = () => {
+const CardProduct = ({ product }) => {
   const navigation = useNavigation();
+  const _productUnit = product.productdetails.map(
+    (productDetail) => productDetail.productunit.name,
+  );
+  const _priceHigh = Math.min.apply(
+    null,
+    product.productdetails.map((item) => item.price),
+  );
+  const _priceLow = Math.max.apply(
+    null,
+    product.productdetails.map((item) => item.price),
+  );
   return (
     <TouchableOpacity
       style={styles.container}
@@ -14,16 +26,23 @@ const CardProduct = () => {
     >
       <Text style={styles.categoryName}>Pokok</Text>
       <View style={styles.imageWrapper}>
-        <Image source={ILNoPhoto} style={styles.productImage} />
+        <Image source={{ uri: product.comodity.picturePath }} style={styles.productImage} />
       </View>
-      <Text style={styles.productName}>Sayuran</Text>
-      <Gap height={10} />
-      <Text style={styles.productPrice} numberOfLines={1} ellipsizeMode="tail">
-        Rp 100.000
-      </Text>
-      <Text style={styles.productUnit} numberOfLines={2} ellipsizeMode="tail">
-        Tersedia /Kg/Pcs/Liter
-      </Text>
+      <View style={{ paddingHorizontal: 10 }}>
+        <Gap height={5} />
+        <Text style={styles.productName}>{product.comodity.name}</Text>
+        <Gap height={10} />
+        <Text style={styles.productPrice} numberOfLines={1} ellipsizeMode="tail">
+          {_priceHigh === _priceLow
+            ? convertCurrency(_priceLow)
+            : `${convertCurrency(_priceLow)} - ${convertCurrency(_priceHigh)}`}
+        </Text>
+        {_productUnit.length > 0 && (
+          <Text style={styles.productUnit} numberOfLines={2} ellipsizeMode="tail">
+            Tersedia {_productUnit.join('/')}
+          </Text>
+        )}
+      </View>
     </TouchableOpacity>
   );
 };
@@ -34,7 +53,6 @@ const styles = StyleSheet.create({
   container: {
     width: '46%',
     backgroundColor: WHITE,
-    padding: 10,
     borderRadius: 10 / 2,
     margin: 5,
   },
@@ -43,8 +61,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   productImage: {
-    maxHeight: 100,
-    maxWidth: 100,
+    width: '100%',
+    aspectRatio: 1,
+    borderTopRightRadius: 10 / 2,
+    borderTopLeftRadius: 10 / 2,
   },
   categoryName: {
     color: WHITE,
@@ -54,6 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: PRIMARY,
     borderBottomRightRadius: 5,
     borderTopLeftRadius: 5,
+    zIndex: 1,
   },
   productName: {
     ...FONT_MEDIUM(12),

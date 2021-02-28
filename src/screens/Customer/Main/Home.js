@@ -1,55 +1,32 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import BottomSheet from 'reanimated-bottom-sheet';
-import { CardSeller, Filter, Gap, Header } from '../../../components';
-import { getSeller } from '../../../services';
+import { CardSeller, Gap, Header } from '../../../components';
+import { setCurrentPage, setLastPage } from '../../../modules';
+import { getSellers } from '../../../services';
 import { FONT_MEDIUM, GRAY_LIGHT, GRAY_MEDIUM, GRAY_THIN, WHITE } from '../../../styles';
 
 const Home = ({ navigation }) => {
-  const [seller, setSeller] = useState([]);
-  const [selectRute, setSelectRute] = useState(false);
-  const [selectType, setSelectType] = useState(false);
-  const [tipe, setTipe] = useState('campuran');
-  const [pageCurrent, setPageCurrent] = useState(1);
-  const [lastPage, setLastPage] = useState(100);
   const sheetRef = React.useRef(null);
   const tabBarHeight = useBottomTabBarHeight();
-  const { isLoading } = useSelector((state) => state.globalReducer);
-
-  const handleSelectType = () => {
-    setSelectType(true);
-    sheetRef.current.snapTo(0);
-  };
-
-  const handleSelectRute = () => {
-    setSelectRute(true);
-    sheetRef.current.snapTo(0);
-  };
+  const { isLoading, currentPage, lastPage } = useSelector((state) => state.globalReducer);
+  const { sellers } = useSelector((state) => state.sellerReducer);
+  const dispatch = useDispatch();
 
   const _handleGetSeller = async () => {
-    if (pageCurrent > lastPage) return null;
-    console.log(tipe);
-    const [res, err] = await getSeller({ page: pageCurrent, type: tipe });
-    if (res === undefined) return console.log('Tidak ada data');
-    setSeller((seller) => [...seller, ...res.data.seller.data]);
-    setPageCurrent(pageCurrent + 1);
-    setLastPage(res.data.seller.last_page ?? 100);
-  };
-
-  const _onSelectType = (type) => {
-    setTipe(type);
-    console.log(type);
-    sheetRef.current.snapTo(1);
-    setSeller([]);
-    setPageCurrent(1);
+    if (currentPage > lastPage) return null;
+    await getSellers({ page: currentPage });
   };
 
   useEffect(() => {
     _handleGetSeller();
-    return () => _handleGetSeller();
-  }, [tipe]);
+    return () => {
+      dispatch(setLastPage(2));
+      dispatch(setCurrentPage(1));
+    };
+  }, []);
 
   const renderContent = () => (
     <View
@@ -70,7 +47,6 @@ const Home = ({ navigation }) => {
           borderBottomWidth: 1,
           borderBottomColor: GRAY_THIN,
         }}
-        onPress={() => _onSelectType('campuran')}
       >
         <Text style={{ ...FONT_MEDIUM(14) }}>Campuran</Text>
       </TouchableOpacity>
@@ -81,7 +57,6 @@ const Home = ({ navigation }) => {
           borderBottomWidth: 1,
           borderBottomColor: GRAY_THIN,
         }}
-        onPress={() => _onSelectType('keliling')}
       >
         <Text style={{ ...FONT_MEDIUM(14) }}>Keliling</Text>
       </TouchableOpacity>
@@ -92,7 +67,6 @@ const Home = ({ navigation }) => {
           borderBottomWidth: 1,
           borderBottomColor: GRAY_THIN,
         }}
-        onPress={() => _onSelectType('mangkal')}
       >
         <Text style={{ ...FONT_MEDIUM(14) }}>Mangkal</Text>
       </TouchableOpacity>
@@ -130,7 +104,7 @@ const Home = ({ navigation }) => {
         refreshing={isLoading}
         keyboardDismissMode="interactive"
         showsVerticalScrollIndicator={false}
-        data={seller}
+        data={sellers}
         numColumns={2}
         // ListHeaderComponent={() => (
         //   <Filter
@@ -163,7 +137,7 @@ const Home = ({ navigation }) => {
 
 const windowHeight = Dimensions.get('window').height;
 
-export default Home;
+export default memo(Home);
 
 const styles = StyleSheet.create({
   container: {

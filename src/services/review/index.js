@@ -1,12 +1,16 @@
 import API from '../../configs/api';
+import { setReviews, store } from '../../modules';
 import { handleAsync } from '../../utilities';
 
-export const getReview = async (payload = {}) => {
+const { dispatch } = store;
+
+export const getReviews = async (payload = {}) => {
   console.log(payload);
   const [res, err] = await handleAsync(
     API.customer.getReview({
       params: payload,
     }),
   );
-  return [res, err];
+  if (err) throw err;
+  dispatch(setReviews(res.data.review.data));
 };
