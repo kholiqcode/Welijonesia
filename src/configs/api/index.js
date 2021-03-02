@@ -14,6 +14,9 @@ API.customer = {
   getReview: ApiRequest.get(baseUrl.customer.review),
   getProduct: ApiRequest.get(baseUrl.customer.product),
   storeOrUpdateFavorit: ApiRequest.post(baseUrl.customer.favorit),
+  storeOrUpdateCart: ApiRequest.post(baseUrl.customer.cart),
+  deleteCart: ApiRequest.delete(baseUrl.customer.cart),
+  getCart: ApiRequest.get(baseUrl.customer.cart),
 };
 
 export default API;

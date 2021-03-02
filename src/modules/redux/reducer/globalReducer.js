@@ -4,6 +4,7 @@ const inititalStateGlobal = {
   isLogged: false,
   currentPage: 1,
   lastPage: 2,
+  counterValue: 1,
 };
 
 export const globalReducer = (state = inititalStateGlobal, action) => {
@@ -33,6 +34,11 @@ export const globalReducer = (state = inititalStateGlobal, action) => {
       return {
         ...state,
         lastPage: action.value,
+      };
+    case 'SET_COUNTER_VALUE':
+      return {
+        ...state,
+        counterValue: action.value,
       };
 
     default:

@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useState, useRef, memo, useCallback, useEffect } from 'react';
 
 import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -57,8 +58,9 @@ const HeaderCategory = () => {
   );
 };
 
-const SellerProduct = ({ route }) => {
-  const { id } = route.params;
+const SellerProduct = ({ seller }) => {
+  const navigation = useNavigation();
+  const { id } = seller;
   const { products } = useSelector((state) => state.productReducer);
   const _handleGetProduct = useCallback(async () => {
     await getProducts({ seller_id: id });
@@ -83,7 +85,12 @@ const SellerProduct = ({ route }) => {
           paddingVertical: 5,
         }}
         ListHeaderComponent={() => <HeaderCategory />}
-        renderItem={({ item }) => <CardProduct product={item} />}
+        renderItem={({ item }) => (
+          <CardProduct
+            product={item}
+            onPress={() => navigation.navigate('ProductDetailCustomer', item)}
+          />
+        )}
         ListEmptyComponent={() => <Text>Tidak ada data</Text>}
       />
     </View>

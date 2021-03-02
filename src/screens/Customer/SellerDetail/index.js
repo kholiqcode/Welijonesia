@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ICBackActive } from '../../../assets';
 import { Button, Gap } from '../../../components';
 import { resetProduct } from '../../../modules';
-import { getSeller, storeOrUpdate } from '../../../services';
+import { getSeller, storeOrUpdateFavorit } from '../../../services';
 import {
   boxShadow,
   FONT_MEDIUM,
@@ -67,7 +67,7 @@ const SellerDetail = ({ navigation, route }) => {
 
   const _handleUpdateFavorit = useCallback(async () => {
     setIsFavorit(!isFavorit);
-    const [res, err] = await storeOrUpdate({ seller_id: id });
+    const [res, err] = await storeOrUpdateFavorit({ seller_id: id });
     if (err) return console.log('Gagal update Favorit');
     setCountFavorit(res.data.countFavorit);
   }, [countFavorit]);
@@ -202,7 +202,7 @@ const SellerDetail = ({ navigation, route }) => {
           </ScrollView>
         </View>
         <View style={styles.topTabWrapper}>
-          <TopTabSeller onBottomSheet route={route} />
+          <TopTabSeller onBottomSheet seller={seller} />
         </View>
         {/* <BottomSheet
           ref={sheetRef}

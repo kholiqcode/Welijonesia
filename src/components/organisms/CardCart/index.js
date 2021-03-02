@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { memo, useState } from 'react';
 
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import { ICChat, ICDownCircle, ICLink, ICUpCircle, ILNoPhoto } from '../../../assets';
 import { FONT_MEDIUM, FONT_REGULAR, GRAY_DARK, GRAY_THIN, PRIMARY, WHITE } from '../../../styles';
 import { Button, Gap, Input } from '../../atoms';
@@ -8,6 +10,8 @@ import { OrderItem } from '../../molecules';
 
 const CardCart = ({ handleSelectPayment }) => {
   const [expand, setExpand] = useState(false);
+  const { cart } = useSelector((state) => state.cartReducer);
+  const navigation = useNavigation();
   return (
     <View
       style={{
@@ -28,7 +32,7 @@ const CardCart = ({ handleSelectPayment }) => {
           borderTopEndRadius: 15,
         }}
       >
-        <Text style={{ ...FONT_MEDIUM(10), color: WHITE }}>Keliling</Text>
+        <Text style={{ ...FONT_MEDIUM(10), color: WHITE }}>{cart?.seller?.type}</Text>
       </View>
 
       <View
@@ -50,11 +54,13 @@ const CardCart = ({ handleSelectPayment }) => {
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Image source={ILNoPhoto} style={{ height: 35, width: 35 }} />
             <Gap width={10} />
-            <Text style={{ ...FONT_MEDIUM(16) }}>Pak Sukardi</Text>
+            <Text style={{ ...FONT_MEDIUM(16) }}>{cart?.seller?.name}</Text>
           </View>
         </View>
         <View style={styles.sellerNav}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SellerDetail', { id: cart?.seller?.id })}
+          >
             <ICLink height={24} width={24} />
           </TouchableOpacity>
           <Gap width={15} />
@@ -69,11 +75,9 @@ const CardCart = ({ handleSelectPayment }) => {
         <View style={styles.sectionWrapper}>
           <Gap height={10} />
           <View style={styles.orderList}>
-            <OrderItem />
-            <OrderItem />
-            <OrderItem />
-            <OrderItem />
-            <OrderItem />
+            {cart?.cartdetails?.map((item, index) => (
+              <OrderItem cartItem={item} key={index.toString()} />
+            ))}
           </View>
         </View>
         <View style={styles.sectionWrapper}>
@@ -130,7 +134,7 @@ const CardCart = ({ handleSelectPayment }) => {
         <Gap height={10} />
         <View style={styles.sectionTotalWrapper}>
           <Text style={styles.subTitle}>Total Pesanan</Text>
-          <Text style={styles.subTitle}>Rp 100.000</Text>
+          <Text style={styles.subTitle}>Rp {cart.total}</Text>
         </View>
         <View style={{ paddingVertical: 10 }}>
           <Button text="Pesan Sekarang" />
@@ -140,7 +144,7 @@ const CardCart = ({ handleSelectPayment }) => {
   );
 };
 
-export default CardCart;
+export default memo(CardCart);
 
 const styles = StyleSheet.create({
   sectionWrapper: {

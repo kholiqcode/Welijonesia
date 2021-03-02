@@ -10,70 +10,84 @@ import {
   GRAY_MEDIUM,
   PRIMARY,
 } from '../../../styles';
+import { removeData } from '../../../utilities';
 
-const Account = ({ navigation }) => (
-  <View style={styles.container}>
-    <View style={styles.header}>
-      <View style={{ width: '40%', alignItems: 'flex-end' }}>
-        <ICChatWhite height={30} width={30} />
-      </View>
-      <View style={{ width: '40%' }}>
-        <Button text="Login" greenDark variant="roundedPill" />
-      </View>
-    </View>
-    <View style={styles.navigation}>
-      <View style={styles.myProfil}>
-        <View style={styles.photoProfil}>
-          <Image
-            source={ILNoPhoto}
-            style={{
-              height: 100,
-              width: 100,
-            }}
-          />
+const Account = ({ navigation }) => {
+  const signOut = () => {
+    removeData(['TOKEN']);
+    navigation.reset({ index: 0, routes: [{ name: 'CustomerAuth' }] });
+  };
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={{ width: '40%', alignItems: 'flex-end' }}>
+          <ICChatWhite height={30} width={30} />
         </View>
-        <Gap height={10} />
-        <Text style={styles.profilName}> Abdul Kholiq </Text>
-        <Gap height={5} />
-        <Text style={styles.profilEmail}> welijonesia@gmail.com </Text>
+        <View style={{ width: '40%' }}>
+          <Button onPress={() => signOut()} text="Logout" greenDark variant="roundedPill" />
+        </View>
       </View>
-      <View
-        style={{
-          justifyContent: 'space-between',
-          flex: 1,
-          paddingVertical: 10,
-        }}
-      >
-        <TouchableOpacity onPress={() => navigation.navigate('EditProfilCustomer')}>
-          <Input placeholder="Edit Profil" variant="roundedPill" more rightIcon disable noBorder />
-        </TouchableOpacity>
-        <Gap height={20} />
-        <TouchableOpacity onPress={() => navigation.navigate('ChangePasswordCustomer')}>
-          <Input
-            placeholder="Ubah Password"
-            variant="roundedPill"
-            more
-            rightIcon
-            disable
-            noBorder
-          />
-        </TouchableOpacity>
-        <Gap height={20} />
-        <TouchableOpacity onPress={() => navigation.navigate('AddressCustomer')}>
-          <Input placeholder="Alamat" variant="roundedPill" more rightIcon disable noBorder />
-        </TouchableOpacity>
-        <Gap height={20} />
-        <TouchableOpacity>
-          <Input placeholder="Favorit" variant="roundedPill" more rightIcon disable noBorder />
-        </TouchableOpacity>
-        <Gap height={20} />
-        <TouchableOpacity>
-          <Input placeholder="Pengaturan" variant="roundedPill" more rightIcon disable noBorder />
-        </TouchableOpacity>
+      <View style={styles.navigation}>
+        <View style={styles.myProfil}>
+          <View style={styles.photoProfil}>
+            <Image
+              source={ILNoPhoto}
+              style={{
+                height: 100,
+                width: 100,
+              }}
+            />
+          </View>
+          <Gap height={10} />
+          <Text style={styles.profilName}> Abdul Kholiq </Text>
+          <Gap height={5} />
+          <Text style={styles.profilEmail}> welijonesia@gmail.com </Text>
+        </View>
+        <View
+          style={{
+            justifyContent: 'space-between',
+            flex: 1,
+            paddingVertical: 10,
+          }}
+        >
+          <TouchableOpacity onPress={() => navigation.navigate('EditProfilCustomer')}>
+            <Input
+              placeholder="Edit Profil"
+              variant="roundedPill"
+              more
+              rightIcon
+              disable
+              noBorder
+            />
+          </TouchableOpacity>
+          <Gap height={20} />
+          <TouchableOpacity onPress={() => navigation.navigate('ChangePasswordCustomer')}>
+            <Input
+              placeholder="Ubah Password"
+              variant="roundedPill"
+              more
+              rightIcon
+              disable
+              noBorder
+            />
+          </TouchableOpacity>
+          <Gap height={20} />
+          <TouchableOpacity onPress={() => navigation.navigate('AddressCustomer')}>
+            <Input placeholder="Alamat" variant="roundedPill" more rightIcon disable noBorder />
+          </TouchableOpacity>
+          <Gap height={20} />
+          <TouchableOpacity>
+            <Input placeholder="Favorit" variant="roundedPill" more rightIcon disable noBorder />
+          </TouchableOpacity>
+          <Gap height={20} />
+          <TouchableOpacity>
+            <Input placeholder="Pengaturan" variant="roundedPill" more rightIcon disable noBorder />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
-  </View>
-);
+  );
+};
 
 export default Account;
 

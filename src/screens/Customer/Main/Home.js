@@ -119,7 +119,7 @@ const Home = ({ navigation }) => {
         renderItem={({ item }) => (
           <CardSeller seller={item} onPress={() => navigation.navigate('SellerDetail', item)} />
         )}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item, index) => index.toString()}
         onEndReached={() => _handleGetSeller()}
         onEndReachedThreshold={0.1}
       />

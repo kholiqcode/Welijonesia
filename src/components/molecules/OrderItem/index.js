@@ -4,18 +4,28 @@ import { ILNoPhoto } from '../../../assets';
 import { FONT_REGULAR, PRIMARY, SECONDARY } from '../../../styles';
 import { Counter } from '../../atoms';
 
-const OrderItem = ({ counter }) => (
+const OrderItem = ({ counter, cartItem }) => (
   <View style={styles.orderListItem}>
     <View style={styles.photoProductWrapper}>
       <Image source={ILNoPhoto} style={styles.photoProduct} />
     </View>
     <View style={styles.detailProductWrapper}>
-      <Text style={styles.categoryProduct}>Pokok</Text>
-      <Text style={styles.nameProduct}>Gula</Text>
-      <Text style={styles.priceProduct}>Rp 13.500/Kg</Text>
+      <Text style={styles.categoryProduct}>
+        {cartItem?.productdetail?.product?.comodity?.category?.name}
+      </Text>
+      <Text style={styles.nameProduct}>{cartItem?.productdetail?.product?.comodity?.name}</Text>
+      <Text style={styles.priceProduct}>
+        Rp {cartItem?.productdetail?.price}/{cartItem?.productdetail?.productunit?.name}
+      </Text>
     </View>
     <View style={styles.totalOrder}>
-      {counter ? <Counter /> : <Text style={styles.qtyProduct}>25Kg</Text>}
+      {counter ? (
+        <Counter />
+      ) : (
+        <Text style={styles.qtyProduct}>
+          {cartItem.quantity}/{cartItem?.productdetail?.productunit?.name}
+        </Text>
+      )}
     </View>
   </View>
 );

@@ -13,6 +13,7 @@ const baseUrl = {
     review: `${config.url.api}/customer/review`,
     favorit: `${config.url.api}/customer/favorit`,
     product: `${config.url.api}/customer/product`,
+    cart: `${config.url.api}/customer/cart`,
   },
 };
 

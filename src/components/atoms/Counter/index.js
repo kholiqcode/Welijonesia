@@ -1,22 +1,44 @@
-import React from 'react';
+import React, { memo, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { PRIMARY, SECONDARY } from '../../../styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCounterValue } from '../../../modules';
+import { FONT_REGULAR, GRAY_THIN, PRIMARY } from '../../../styles';
 
-const Counter = () => (
-  <>
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.counterBtn}>
-        <Text>-</Text>
-      </TouchableOpacity>
-      <Text style={styles.textCounter}>0</Text>
-      <TouchableOpacity style={styles.counterBtn}>
-        <Text>+</Text>
-      </TouchableOpacity>
-    </View>
-  </>
-);
+const Counter = () => {
+  const { counterValue } = useSelector((state) => state.globalReducer);
+  const dispatch = useDispatch();
 
-export default Counter;
+  const _handleOnPlus = () => {
+    dispatch(setCounterValue(counterValue + 1));
+  };
+
+  const _handleOnMinus = () => {
+    if (counterValue === 0) return;
+    dispatch(setCounterValue(counterValue - 1));
+  };
+
+  useEffect(
+    () => () => {
+      dispatch(setCounterValue(0));
+    },
+    [],
+  );
+  return (
+    <>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={_handleOnMinus} style={styles.counterBtn}>
+          <Text>-</Text>
+        </TouchableOpacity>
+        <Text style={styles.textCounter}>{counterValue}</Text>
+        <TouchableOpacity onPress={_handleOnPlus} style={styles.counterBtn}>
+          <Text>+</Text>
+        </TouchableOpacity>
+      </View>
+    </>
+  );
+};
+
+export default memo(Counter);
 
 const styles = StyleSheet.create({
   container: {
@@ -30,11 +52,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   textCounter: {
-    fontSize: 12,
+    ...FONT_REGULAR(14),
     flex: 2,
     textAlign: 'center',
     textAlignVertical: 'center',
     borderWidth: 1,
-    borderColor: SECONDARY,
+    borderColor: GRAY_THIN,
   },
 });

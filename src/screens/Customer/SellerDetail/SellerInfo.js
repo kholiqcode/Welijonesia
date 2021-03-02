@@ -9,9 +9,9 @@ import { Button, Gap } from '../../../components';
 import { getReviews } from '../../../services';
 import { FONT_BOLD, FONT_MEDIUM, FONT_REGULAR, SECONDARY, WHITE } from '../../../styles';
 
-const SellerInfo = ({ route }) => {
-  const { type, rutedetails, user, id } = route.params;
-  const rute = useMemo(() => rutedetails.map((item) => item.rute.name), rutedetails);
+const SellerInfo = ({ seller }) => {
+  const { type, rutedetails, user, id } = seller;
+  const rute = useMemo(() => rutedetails?.map((item) => item.rute.name), rutedetails);
   const { reviews } = useSelector((state) => state.reviewReducer);
   const { currentPage, lastPage } = useSelector((state) => state.globalReducer);
 
@@ -45,13 +45,13 @@ const SellerInfo = ({ route }) => {
           <View style={styles.contactItem}>
             <Button btnIcon="phone" disabled />
             <Text style={styles.textContactItem} numberOfLines={1}>
-              0{user.phone}
+              0{user?.phone}
             </Text>
           </View>
           <View style={styles.contactItem}>
             <Button btnIcon="email" disabled />
             <Text style={styles.textContactItem} numberOfLines={1}>
-              {user.email}
+              {user?.email}
             </Text>
           </View>
         </View>
@@ -59,7 +59,7 @@ const SellerInfo = ({ route }) => {
           <View style={styles.contactItem}>
             <Button btnIcon="marker" disabled />
             <Text style={styles.textContactItem} numberOfLines={1}>
-              {rute.length !== 0 ? rute.join(' => ') : 'Penjual ini belum memiliki rute'}
+              {rute?.length !== 0 ? rute?.join(' => ') : 'Penjual ini belum memiliki rute'}
             </Text>
           </View>
         </View>
@@ -86,7 +86,7 @@ const SellerInfo = ({ route }) => {
           <View style={{ marginBottom: 15 }}>
             <View style={styles.customerProfil}>
               <Image source={ILNoPhoto} style={styles.customerPhoto} />
-              <Text style={styles.customerName}>{item.user.name}</Text>
+              <Text style={styles.customerName}>{item.user?.name}</Text>
             </View>
             <Gap height={6} />
             <View style={styles.customerRate}>

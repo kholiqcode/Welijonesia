@@ -20,3 +20,7 @@ export const getData = async (storageKey) => {
     console.log('Gagal mengambil data dari localstorage');
   }
 };
+
+export const removeData = (arrData = ['TOKEN']) => {
+  AsyncStorage.multiRemove(arrData);
+};

@@ -1,13 +1,10 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ILNoPhoto } from '../../../assets';
 import { FONT_MEDIUM, FONT_REGULAR, PRIMARY, SECONDARY, WHITE } from '../../../styles';
 import { convertCurrency } from '../../../utilities';
 import { Gap } from '../../atoms';
 
-const CardProduct = ({ product }) => {
-  const navigation = useNavigation();
+const CardProduct = ({ product, onPress }) => {
   const _productUnit = product.productdetails.map(
     (productDetail) => productDetail.productunit.name,
   );
@@ -20,10 +17,7 @@ const CardProduct = ({ product }) => {
     product.productdetails.map((item) => item.price),
   );
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => navigation.navigate('ProductDetailCustomer')}
-    >
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <Text style={styles.categoryName}>Pokok</Text>
       <View style={styles.imageWrapper}>
         <Image source={{ uri: product.comodity.picturePath }} style={styles.productImage} />

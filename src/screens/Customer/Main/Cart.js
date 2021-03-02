@@ -1,8 +1,19 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import React, { useState } from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+
+import {
+  Dimensions,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { useSelector } from 'react-redux';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { CardCart, Gap, Header, Notif } from '../../../components';
+import { getCart } from '../../../services';
 import { FONT_MEDIUM, GRAY_LIGHT, GRAY_MEDIUM, GRAY_THIN, WHITE } from '../../../styles';
 
 export default function Cart() {
@@ -10,6 +21,15 @@ export default function Cart() {
   const sheetRef = React.useRef(null);
   const [selectPayment, setSelectPayment] = useState(false);
   const [selectShippig, setSelectShippig] = useState(false);
+  const { isLoading } = useSelector((state) => state.globalReducer);
+
+  useEffect(() => {
+    _handleGetCart();
+  }, []);
+
+  const _handleGetCart = useCallback(async () => {
+    await getCart();
+  }, []);
 
   const handleSelectPayment = () => {
     setSelectPayment(true);
@@ -85,7 +105,13 @@ export default function Cart() {
       <Header flat title="Keranjang" />
       <Notif />
       <Gap height={10} />
-      <ScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 10 }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ paddingHorizontal: 10 }}
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={() => _handleGetCart()} />
+        }
+      >
         <CardCart handleSelectPayment={handleSelectPayment} />
         <Gap height={tabBarHeight} />
       </ScrollView>

@@ -4,6 +4,7 @@ import { globalReducer } from './globalReducer';
 import { sellerReducer } from './sellerReducer';
 import { reviewReducer } from './reviewReducer';
 import { productReducer } from './productReducer';
+import { cartReducer } from './cartReducer';
 
 const reducer = combineReducers({
   globalReducer,
@@ -11,6 +12,7 @@ const reducer = combineReducers({
   sellerReducer,
   reviewReducer,
   productReducer,
+  cartReducer,
 });
 
 export default reducer;

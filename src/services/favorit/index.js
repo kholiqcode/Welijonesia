@@ -4,7 +4,7 @@ import { getData, handleAsync } from '../../utilities';
 /**
  * a Service for activation
  */
-export const storeOrUpdate = async (payload = {}) =>
+export const storeOrUpdateFavorit = async (payload = {}) =>
   getData('TOKEN').then(async (resToken) => {
     const [res, err] = await handleAsync(
       API.customer.storeOrUpdateFavorit({
