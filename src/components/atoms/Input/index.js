@@ -26,6 +26,7 @@ const Input = ({
   noBorder,
   more,
   multiline,
+  numberOfLines
 }) => {
   const [border, setBorder] = useState(GRAY_THIN);
   const [radius, setRadius] = useState(30 / 2);
@@ -78,7 +79,7 @@ const Input = ({
         selectTextOnFocus={!disable}
         keyboardShouldPersistTaps={keyboardShouldPersistTaps}
         style={styles.input(border, radius, noBorder)}
-        numberOfLines={multiline ?? 1}
+        numberOfLines={numberOfLines}
         multiline={multiline}
         returnKeyType={search ? 'search' : 'done'}
       />

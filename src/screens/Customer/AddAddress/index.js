@@ -158,7 +158,8 @@ const AddAddress = ({ navigation }) => {
               placeholder="Alamat"
               autoCompleteType="street-address"
               variant="roundedPill"
-              multiline={4}
+              multiline
+              numberOfLines={4}
             />
             <Gap height={15} />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

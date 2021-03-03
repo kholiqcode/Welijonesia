@@ -9,20 +9,23 @@ import { Button, Gap } from '../../../components';
 import { getReviews } from '../../../services';
 import { FONT_BOLD, FONT_MEDIUM, FONT_REGULAR, SECONDARY, WHITE } from '../../../styles';
 
-const SellerInfo = ({ seller }) => {
-  const { type, rutedetails, user, id } = seller;
-  const rute = useMemo(() => rutedetails?.map((item) => item.rute.name), rutedetails);
+const SellerInfo = ({ sellerId }) => {
+  const rute = useMemo(
+    () => seller?.rutedetails?.map((item) => item.rute.name),
+    seller?.rutedetails,
+  );
   const { reviews } = useSelector((state) => state.reviewReducer);
   const { currentPage, lastPage } = useSelector((state) => state.globalReducer);
+  const { seller } = useSelector((state) => state.sellerReducer);
 
   const _handleGetReview = useCallback(async () => {
-    if (currentPage === lastPage) return null;
-    await getReviews({ page: currentPage, seller_id: id });
-  }, [reviews]);
+    if (sellerId === undefined || currentPage === lastPage) return null;
+    await getReviews({ page: currentPage, seller_id: sellerId });
+  }, [reviews, sellerId]);
 
   useEffect(() => {
     _handleGetReview();
-  }, [id]);
+  }, [sellerId]);
 
   return (
     <View style={styles.container}>
@@ -31,7 +34,7 @@ const SellerInfo = ({ seller }) => {
           <View style={styles.contactItem}>
             <Button btnIcon="motor" disabled />
             <Text style={styles.textContactItem} numberOfLines={1}>
-              {type}
+              {seller?.type}
             </Text>
           </View>
           <View style={styles.contactItem}>
@@ -45,13 +48,13 @@ const SellerInfo = ({ seller }) => {
           <View style={styles.contactItem}>
             <Button btnIcon="phone" disabled />
             <Text style={styles.textContactItem} numberOfLines={1}>
-              0{user?.phone}
+              0{seller?.user?.phone}
             </Text>
           </View>
           <View style={styles.contactItem}>
             <Button btnIcon="email" disabled />
             <Text style={styles.textContactItem} numberOfLines={1}>
-              {user?.email}
+              {seller?.user?.email}
             </Text>
           </View>
         </View>

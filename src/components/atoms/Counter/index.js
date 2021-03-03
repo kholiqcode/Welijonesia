@@ -2,7 +2,7 @@ import React, { memo, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCounterValue } from '../../../modules';
-import { FONT_REGULAR, GRAY_THIN, PRIMARY } from '../../../styles';
+import { FONT_REGULAR, GRAY_THIN, PRIMARY, scaleSize } from '../../../styles';
 
 const Counter = () => {
   const { counterValue } = useSelector((state) => state.globalReducer);
@@ -43,7 +43,8 @@ export default memo(Counter);
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    height: 20,
+    height: scaleSize(30),
+    borderRadius: 10,
   },
   counterBtn: {
     backgroundColor: PRIMARY,

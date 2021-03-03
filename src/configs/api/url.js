@@ -15,6 +15,9 @@ const baseUrl = {
     product: `${config.url.api}/customer/product`,
     cart: `${config.url.api}/customer/cart`,
   },
+  auth: {
+    refresh: `${config.url.api}/auth/refresh`,
+  },
 };
 
 export default baseUrl;

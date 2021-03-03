@@ -1,29 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { FONT_MEDIUM, PRIMARY, SECONDARY, WHITE } from '../../../styles';
+import { FONT_MEDIUM, SECONDARY, WHITE } from '../../../styles';
 
-const SelectItem = ({ value, onPress }) => {
-  const [isSelected, setIsSelected] = useState(false);
-  const _onSelect = () => {
-    setIsSelected(!isSelected);
-    onPress(!isSelected);
-  };
-  return (
-    <TouchableOpacity onPress={_onSelect}>
-      <Text style={styles.txtCategory(isSelected)}>{value}</Text>
-    </TouchableOpacity>
-  );
-};
+const SelectItem = ({ value, onPress }) => (
+  <TouchableOpacity onPress={onPress}>
+    <Text style={styles.txtCategory}>{value}</Text>
+  </TouchableOpacity>
+);
 export default SelectItem;
 
 const styles = StyleSheet.create({
-  txtCategory: (isSelected) => ({
+  txtCategory: {
     textAlignVertical: 'center',
-    backgroundColor: isSelected ? PRIMARY : SECONDARY,
+    backgroundColor: SECONDARY,
     paddingVertical: 5,
     paddingHorizontal: 8,
-    borderRadius: 13,
+    borderRadius: 10,
     ...FONT_MEDIUM(12),
     color: WHITE,
-  }),
+  },
 });

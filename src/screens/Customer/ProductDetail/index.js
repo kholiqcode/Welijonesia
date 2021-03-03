@@ -3,10 +3,11 @@ import indonesianLocale from 'moment/locale/id';
 import React, { memo, useCallback, useEffect, useState } from 'react';
 import { FlatList, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Rating } from 'react-native-ratings';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { ICBackActive, ICChat, ICLink, ICMarker, ILNoPhoto } from '../../../assets';
 import { Button, Counter, Gap, SelectItem } from '../../../components';
+import { setCounterValue } from '../../../modules';
 import { getProduct, storeOrUpdateCart } from '../../../services';
 import {
   boxShadow,
@@ -22,6 +23,7 @@ import {
   SECONDARY,
   WHITE,
 } from '../../../styles';
+import { showMessage } from '../../../utilities';
 
 const ProductDetail = ({ navigation, route }) => {
   const { id } = route.params;
@@ -31,30 +33,34 @@ const ProductDetail = ({ navigation, route }) => {
   const { counterValue } = useSelector((state) => state.globalReducer);
   const [productDetail, setProductDetail] = useState([]);
   const [isAddCart, setIsAddCart] = useState(false);
-
+  const [priceTotal, setPriceTotal] = useState(0);
+  const dispatch = useDispatch();
   const _handleGetProduct = useCallback(async () => {
     await getProduct({ id });
   }, [product]);
+
+  useEffect(() => {
+    setPriceTotal(counterValue * productDetail?.price);
+  }, [counterValue, productDetail]);
 
   useEffect(() => {
     _handleGetProduct();
   }, []);
 
   const _handleOnSelectedItem = useCallback(
-    (item, callback) => {
-      if (callback) {
-        setProductDetail([...productDetail, ...[item]]);
-      } else {
-        setProductDetail([...productDetail.filter((oldItem) => oldItem.id !== item.id)]);
-      }
+    (item) => {
+      setProductDetail(item);
+      dispatch(setCounterValue(1));
     },
     [productDetail],
   );
 
   const _handleOnAddCart = async () => {
+    if (counterValue <= 0) return showMessage('Jumlah pesanan anda tidak boleh kurang dari 0');
+    if (priceTotal <= 0) return showMessage('Anda belum menentukan jumlah pesanan');
     if (isAddCart) {
       sheetRef.current.snapTo(1);
-      await storeOrUpdateCart({ product_detail: productDetail[0].id, qty: counterValue });
+      await storeOrUpdateCart({ product_detail: productDetail.id, qty: counterValue });
       setProductDetail([]);
       setIsAddCart(false);
     } else {
@@ -97,41 +103,50 @@ const ProductDetail = ({ navigation, route }) => {
       }}
     >
       {/* <SelectList data={initCategory} /> */}
+      <Text style={{ ...FONT_REGULAR(16) }}>Pilih Satuan</Text>
+      <Gap height={10} />
       <View
         style={{
           flexWrap: 'wrap',
           flexDirection: 'row',
-          justifyContent: 'space-evenly',
         }}
       >
         {product?.productdetails?.map((item, index) => (
-          <SelectItem
-            value={item.productunit?.name}
-            onPress={(callback) => _handleOnSelectedItem(item, callback)}
-            key={index.toString()}
-          />
+          <View style={{ marginRight: 10 }} key={index.toString()}>
+            <SelectItem
+              value={item.productunit?.name}
+              onPress={() => _handleOnSelectedItem(item)}
+            />
+          </View>
         ))}
       </View>
-      <Gap height={20} />
+      <Gap width={-10} />
+      <Gap height={10} />
+      <Gap style={{ borderTopWidth: 1, borderTopColor: GRAY_MEDIUM }} />
+      <Gap height={10} />
+      <Text style={{ ...FONT_REGULAR(16) }}>Jumlah</Text>
       <View style={{ flex: 1 }}>
-        {productDetail.map((item, index) => (
+        {productDetail && (
           <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-            key={index.toString()}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
           >
-            <Text style={{ ...FONT_MEDIUM(14), flex: 2 }}>{item.productunit?.name}</Text>
+            <Text style={{ ...FONT_MEDIUM(14), flex: 2 }}>{productDetail?.productunit?.name}</Text>
             <View style={{ flex: 1, alignItems: 'center' }}>
               <Counter />
             </View>
           </View>
-        ))}
+        )}
       </View>
     </View>
   );
 
   return (
     <>
-      <StatusBar translucent backgroundColor="transparent" />
+      {/* <StatusBar translucent backgroundColor="transparent" /> */}
       <View style={styles.container}>
         {/* <Header /> */}
         <Image source={{ uri: product.comodity?.picturePath }} style={styles.productImage} />
@@ -142,7 +157,9 @@ const ProductDetail = ({ navigation, route }) => {
               <Gap height={2} />
               <Text style={styles.txtProductName}>{product.comodity?.name}</Text>
             </View>
-            <Text style={styles.txtProductPrice}>Rp {counterValue * productDetail[0]?.price}</Text>
+            <Text style={styles.txtProductPrice}>
+              Rp {Number.isNaN(priceTotal) ? 0 : priceTotal}
+            </Text>
           </View>
           <Gap height={5} />
           <Text style={styles.txtProductDesc}>{product?.description}</Text>
@@ -291,7 +308,7 @@ const ProductDetail = ({ navigation, route }) => {
       </View>
       <BottomSheet
         ref={sheetRef}
-        snapPoints={['50%', 0, '90%']}
+        snapPoints={['40%', 0]}
         renderContent={renderContent}
         renderHeader={renderHeader}
         enabledInnerScrolling={false}
@@ -323,7 +340,7 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
     justifyContent: 'center',
     alignItems: 'center',
-    top: 10 + StatusBar.currentHeight,
+    top: 10,
     left: 10,
     ...boxShadow(GRAY_DARK, { height: 2, width: 2 }, 5, 1),
   },

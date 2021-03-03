@@ -58,16 +58,16 @@ const HeaderCategory = () => {
   );
 };
 
-const SellerProduct = ({ seller }) => {
+const SellerProduct = ({ sellerId }) => {
   const navigation = useNavigation();
-  const { id } = seller;
   const { products } = useSelector((state) => state.productReducer);
   const _handleGetProduct = useCallback(async () => {
-    await getProducts({ seller_id: id });
-  }, [products]);
+    if (sellerId === undefined) return null;
+    await getProducts({ seller_id: sellerId });
+  }, [products, sellerId]);
   useEffect(() => {
     _handleGetProduct();
-  }, []);
+  }, [sellerId]);
   return (
     <View style={styles.container}>
       <FlatList

@@ -202,7 +202,7 @@ const SellerDetail = ({ navigation, route }) => {
           </ScrollView>
         </View>
         <View style={styles.topTabWrapper}>
-          <TopTabSeller onBottomSheet seller={seller} />
+          <TopTabSeller onBottomSheet sellerId={id} />
         </View>
         {/* <BottomSheet
           ref={sheetRef}

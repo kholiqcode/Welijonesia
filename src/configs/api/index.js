@@ -19,4 +19,9 @@ API.customer = {
   getCart: ApiRequest.get(baseUrl.customer.cart),
 };
 
+// Customer
+API.auth = {
+  refresh: ApiRequest.post(baseUrl.auth.refresh),
+};
+
 export default API;
