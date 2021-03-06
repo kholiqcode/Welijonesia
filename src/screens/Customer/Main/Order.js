@@ -2,7 +2,6 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { CardOrder, Gap, Header, Notif } from '../../../components';
-import { GRAY_THIN, WHITE } from '../../../styles';
 
 const Order = () => {
   const tabBarHeight = useBottomTabBarHeight();

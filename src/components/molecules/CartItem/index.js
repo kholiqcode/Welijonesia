@@ -2,24 +2,35 @@ import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { ILNoPhoto } from '../../../assets';
 import { FONT_REGULAR, PRIMARY, SECONDARY } from '../../../styles';
+import { Counter } from '../../atoms';
 
-const OrderItem = () => (
+const CartItem = ({ counter, cartItem }) => (
   <View style={styles.orderListItem}>
     <View style={styles.photoProductWrapper}>
       <Image source={ILNoPhoto} style={styles.photoProduct} />
     </View>
     <View style={styles.detailProductWrapper}>
-      <Text style={styles.categoryProduct}>Test</Text>
-      <Text style={styles.nameProduct}>Test</Text>
-      <Text style={styles.priceProduct}>Rp 1000000</Text>
+      <Text style={styles.categoryProduct}>
+        {cartItem?.productdetail?.product?.comodity?.category?.name}
+      </Text>
+      <Text style={styles.nameProduct}>{cartItem?.productdetail?.product?.comodity?.name}</Text>
+      <Text style={styles.priceProduct}>
+        Rp {cartItem?.productdetail?.price}/{cartItem?.productdetail?.productunit?.name}
+      </Text>
     </View>
     <View style={styles.totalOrder}>
-      <Text style={styles.qtyProduct}>10</Text>
+      {counter ? (
+        <Counter />
+      ) : (
+        <Text style={styles.qtyProduct}>
+          {cartItem.quantity}/{cartItem?.productdetail?.productunit?.name}
+        </Text>
+      )}
     </View>
   </View>
 );
 
-export default OrderItem;
+export default CartItem;
 
 const styles = StyleSheet.create({
   orderListItem: {

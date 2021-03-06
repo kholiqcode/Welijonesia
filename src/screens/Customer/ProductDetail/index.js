@@ -41,6 +41,9 @@ const ProductDetail = ({ navigation, route }) => {
 
   useEffect(() => {
     setPriceTotal(counterValue * productDetail?.price);
+    return () => {
+      setPriceTotal(0);
+    };
   }, [counterValue, productDetail]);
 
   useEffect(() => {
@@ -56,13 +59,16 @@ const ProductDetail = ({ navigation, route }) => {
   );
 
   const _handleOnAddCart = async () => {
-    if (counterValue <= 0) return showMessage('Jumlah pesanan anda tidak boleh kurang dari 0');
-    if (priceTotal <= 0) return showMessage('Anda belum menentukan jumlah pesanan');
     if (isAddCart) {
+      if (counterValue <= 0) return showMessage('Jumlah pesanan anda tidak boleh kurang dari 0');
+      if (priceTotal <= 0) return showMessage('Anda belum menentukan jumlah pesanan');
       sheetRef.current.snapTo(1);
       await storeOrUpdateCart({ product_detail: productDetail.id, qty: counterValue });
       setProductDetail([]);
       setIsAddCart(false);
+      navigation.navigate('CustomerMainScreen', {
+        screen: 'Cart',
+      });
     } else {
       sheetRef.current.snapTo(0);
     }

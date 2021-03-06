@@ -1,14 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { memo, useState } from 'react';
-
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
-import { ICChat, ICDownCircle, ICLink, ICUpCircle, ILNoPhoto } from '../../../assets';
-import { FONT_MEDIUM, FONT_REGULAR, GRAY_DARK, GRAY_THIN, PRIMARY, WHITE } from '../../../styles';
+import { ICChat, ICLink, ILNoPhoto } from '../../../assets';
+import { FONT_MEDIUM, GRAY_THIN, PRIMARY, WHITE } from '../../../styles';
 import { Button, Gap, Input } from '../../atoms';
-import { OrderItem } from '../../molecules';
+import { CartItem } from '../../molecules';
 
-const CardCart = ({ handleSelectPayment }) => {
+const CardCart = ({ handleSelectPayment, paymentMethod }) => {
   const [expand, setExpand] = useState(false);
   const { cart } = useSelector((state) => state.cartReducer);
   const navigation = useNavigation();
@@ -76,7 +75,7 @@ const CardCart = ({ handleSelectPayment }) => {
           <Gap height={10} />
           <View style={styles.orderList}>
             {cart?.cartdetails?.map((item, index) => (
-              <OrderItem cartItem={item} key={index.toString()} />
+              <CartItem cartItem={item} key={index.toString()} />
             ))}
           </View>
         </View>
@@ -94,6 +93,7 @@ const CardCart = ({ handleSelectPayment }) => {
                 disable
                 noBorder
                 onPress={() => handleSelectPayment()}
+                value={paymentMethod.name}
               />
             </TouchableOpacity>
             {/* <TouchableOpacity style={{ marginRight: 5 }} onPress={() => setExpand(true)}>

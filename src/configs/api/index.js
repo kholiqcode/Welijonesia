@@ -17,6 +17,7 @@ API.customer = {
   storeOrUpdateCart: ApiRequest.post(baseUrl.customer.cart),
   deleteCart: ApiRequest.delete(baseUrl.customer.cart),
   getCart: ApiRequest.get(baseUrl.customer.cart),
+  getPaymentMethod: ApiRequest.get(baseUrl.customer.paymentMethod),
 };
 
 // Customer

@@ -5,6 +5,7 @@ import { sellerReducer } from './sellerReducer';
 import { reviewReducer } from './reviewReducer';
 import { productReducer } from './productReducer';
 import { cartReducer } from './cartReducer';
+import { paymentMethodReducer } from './paymentMethodReducer';
 
 const reducer = combineReducers({
   globalReducer,
@@ -13,6 +14,7 @@ const reducer = combineReducers({
   reviewReducer,
   productReducer,
   cartReducer,
+  paymentMethodReducer,
 });
 
 export default reducer;

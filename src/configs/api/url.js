@@ -14,6 +14,7 @@ const baseUrl = {
     favorit: `${config.url.api}/customer/favorit`,
     product: `${config.url.api}/customer/product`,
     cart: `${config.url.api}/customer/cart`,
+    paymentMethod: `${config.url.api}/customer/payment-method`,
   },
   auth: {
     refresh: `${config.url.api}/auth/refresh`,

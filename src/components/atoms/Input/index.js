@@ -26,13 +26,15 @@ const Input = ({
   noBorder,
   more,
   multiline,
-  numberOfLines
+  numberOfLines,
+  onFocus,
 }) => {
   const [border, setBorder] = useState(GRAY_THIN);
   const [radius, setRadius] = useState(30 / 2);
 
   const onFocusForm = () => {
     setBorder(PRIMARY);
+    if (onFocus !== undefined) onFocus();
   };
 
   const onBlurForm = () => {
