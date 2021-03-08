@@ -4,3 +4,8 @@ export * from './reviewAction';
 export * from './productAction';
 export * from './cartAction';
 export * from './paymentMethodAction';
+export * from './addressAction';
+export * from './provinceAction';
+export * from './cityAction';
+export * from './districtAction';
+export * from './villageAction';

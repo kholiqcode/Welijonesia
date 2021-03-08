@@ -32,6 +32,10 @@ const Cart = () => {
     _handleGetCart();
   }, []);
 
+  useEffect(() => {
+    setListPayment(paymentMethods);
+  }, [paymentMethods]);
+
   const _handleGetCart = useCallback(async () => {
     await getCart();
   }, []);
@@ -40,7 +44,6 @@ const Cart = () => {
     setSelectPayment(true);
     await getPaymentMethods();
     sheetRef.current.snapTo(0);
-    setListPayment(paymentMethods);
   }, [selectPayment]);
 
   const _handleSearchPayment = (value) => {

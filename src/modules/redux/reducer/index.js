@@ -6,6 +6,11 @@ import { reviewReducer } from './reviewReducer';
 import { productReducer } from './productReducer';
 import { cartReducer } from './cartReducer';
 import { paymentMethodReducer } from './paymentMethodReducer';
+import { addressReducer } from './addressReducer';
+import { provinceReducer } from './provinceReducer';
+import { cityReducer } from './cityReducer';
+import { districtReducer } from './districtReducer';
+import { villageReducer } from './villageReducer';
 
 const reducer = combineReducers({
   globalReducer,
@@ -15,6 +20,11 @@ const reducer = combineReducers({
   productReducer,
   cartReducer,
   paymentMethodReducer,
+  addressReducer,
+  provinceReducer,
+  cityReducer,
+  districtReducer,
+  villageReducer,
 });
 
 export default reducer;

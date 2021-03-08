@@ -18,6 +18,11 @@ API.customer = {
   deleteCart: ApiRequest.delete(baseUrl.customer.cart),
   getCart: ApiRequest.get(baseUrl.customer.cart),
   getPaymentMethod: ApiRequest.get(baseUrl.customer.paymentMethod),
+  getProvince: ApiRequest.get(baseUrl.customer.province),
+  getCity: ApiRequest.get(baseUrl.customer.city),
+  getDistrict: ApiRequest.get(baseUrl.customer.district),
+  getVillage: ApiRequest.get(baseUrl.customer.village),
+  getAddress: ApiRequest.get(baseUrl.customer.address),
 };
 
 // Customer

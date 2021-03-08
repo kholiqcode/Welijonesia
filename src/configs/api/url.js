@@ -15,6 +15,11 @@ const baseUrl = {
     product: `${config.url.api}/customer/product`,
     cart: `${config.url.api}/customer/cart`,
     paymentMethod: `${config.url.api}/customer/payment-method`,
+    province: `${config.url.api}/customer/province`,
+    city: `${config.url.api}/customer/city`,
+    district: `${config.url.api}/customer/district`,
+    village: `${config.url.api}/customer/village`,
+    address: `${config.url.api}/customer/address`,
   },
   auth: {
     refresh: `${config.url.api}/auth/refresh`,

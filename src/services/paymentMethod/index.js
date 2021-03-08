@@ -6,19 +6,14 @@ const { dispatch } = store;
 
 export const getPaymentMethods = async (payload = {}) => {
   console.log(payload);
-  getData('TOKEN').then(async (resToken) => {
-    const [res, err] = await handleAsync(
-      API.customer.getPaymentMethod({
-        headers: {
-          Authorization: resToken.value,
-        },
-        params: payload,
-      }),
-    );
-    if (err) throw err;
-    console.log(res.data);
-    dispatch(setPaymentMethods(res.data.paymentMethod));
-  });
+  const [res, err] = await handleAsync(
+    API.customer.getPaymentMethod({
+      params: payload,
+    }),
+  );
+  if (err) throw err;
+  console.log(res.data);
+  dispatch(setPaymentMethods(res.data.paymentMethod));
 };
 
 export const getPaymentMethod = async (payload = {}) => {
