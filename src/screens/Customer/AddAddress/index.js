@@ -12,7 +12,13 @@ import {
 import { useSelector } from 'react-redux';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { Button, Gap, Input } from '../../../components';
-import { getCities, getDistricts, getVillages } from '../../../services';
+import {
+  getAddresses,
+  getCities,
+  getDistricts,
+  getVillages,
+  storeAddress,
+} from '../../../services';
 import { getProvinces } from '../../../services/province';
 import {
   FONT_BOLD,
@@ -25,6 +31,7 @@ import {
   SECONDARY,
   WHITE,
 } from '../../../styles';
+import { showMessage } from '../../../utilities';
 
 const AddAddress = ({ navigation }) => {
   const sheetRef = React.useRef(null);
@@ -35,17 +42,33 @@ const AddAddress = ({ navigation }) => {
   const [selectVillage, setSelectVillage] = useState(false);
   const [listBottomSheet, setListBottomSheet] = useState([]);
   const [search, setSearch] = useState('');
-  const [name, setName] = useState('');
+  const [addressName, setAddressName] = useState('');
   const [address, setAddress] = useState('');
   const [province, setProvince] = useState('');
   const [city, setCity] = useState('');
   const [district, setDistrict] = useState('');
   const [village, setVillage] = useState('');
   const toggleSwitch = () => setPrimary((previousState) => !previousState);
+  const { isError, message } = useSelector((state) => state.globalReducer);
   const { provinces } = useSelector((state) => state.provinceReducer);
   const { cities } = useSelector((state) => state.cityReducer);
   const { districts } = useSelector((state) => state.districtReducer);
   const { villages } = useSelector((state) => state.villageReducer);
+
+  const formValidation = async () => {
+    console.log(addressName);
+    console.log(village);
+    console.log(address);
+    if (addressName === '' || addressName === undefined) {
+      return { status: false, message: 'Nama tidak boleh kosong' };
+    }
+    if (village === '' || village === undefined) {
+      return { status: false, message: 'Desa/Kecamatan tidak boleh kosong' };
+    }
+    if (address === '' || address === undefined) {
+      return { status: false, message: 'Alamat tidak boleh kosong' };
+    }
+  };
 
   useEffect(() => {
     if (selectCity) return setListBottomSheet(cities);
@@ -58,20 +81,38 @@ const AddAddress = ({ navigation }) => {
     _handleGetProvince();
   }, []);
 
+  const _handleStoreAddress = useCallback(async () => {
+    const validator = await formValidation();
+    if (validator?.status === false) return showMessage(validator.message);
+    await storeAddress({
+      village: village?.id,
+      name: addressName,
+      address,
+      status: primary ? 1 : 0,
+    });
+    if (isError) {
+      showMessage(message);
+    }
+    showMessage(message, 'success');
+
+    await getAddresses();
+    await navigation.goBack();
+  }, [addressName, address, village, primary, message, isError]);
+
   const _handleGetProvince = async () => {
     await getProvinces();
   };
 
   const _handleGetCity = useCallback(async () => {
-    await getCities({ province: province?.id });
+    if (province?.id !== undefined) await getCities({ province: province?.id });
   }, [province]);
 
   const _handleGetDistrict = useCallback(async () => {
-    await getDistricts({ city: city?.id });
+    if (city?.id !== undefined) await getDistricts({ city: city?.id });
   }, [city]);
 
   const _handleGetVillage = useCallback(async () => {
-    await getVillages({ district: district?.id });
+    if (district?.id !== undefined) await getVillages({ district: district?.id });
   }, [district]);
 
   const _handleSearching = useCallback(
@@ -279,8 +320,11 @@ const AddAddress = ({ navigation }) => {
             <Input
               placeholder="Nama"
               variant="roundedPill"
-              value={name}
-              onChangeText={(value) => setName(value)}
+              value={addressName}
+              onChangeText={(value) => {
+                // console.log(value);
+                setAddressName(value);
+              }}
             />
             <Gap height={15} />
             <Input
@@ -360,7 +404,7 @@ const AddAddress = ({ navigation }) => {
             </View>
 
             <Gap height={15} />
-            <Button text="TAMBAH" />
+            <Button text="SIMPAN" onPress={() => _handleStoreAddress()} />
           </View>
         </ScrollView>
       </View>

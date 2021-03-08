@@ -1,6 +1,7 @@
 const inititalStateGlobal = {
   isLoading: false,
   isError: false,
+  message: '',
   isLogged: false,
   currentPage: 1,
   lastPage: 2,

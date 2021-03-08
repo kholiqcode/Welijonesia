@@ -23,6 +23,7 @@ API.customer = {
   getDistrict: ApiRequest.get(baseUrl.customer.district),
   getVillage: ApiRequest.get(baseUrl.customer.village),
   getAddress: ApiRequest.get(baseUrl.customer.address),
+  storeAddress: ApiRequest.post(baseUrl.customer.address),
 };
 
 // Customer
