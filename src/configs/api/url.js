@@ -20,6 +20,7 @@ const baseUrl = {
     district: `${config.url.api}/customer/district`,
     village: `${config.url.api}/customer/village`,
     address: `${config.url.api}/customer/address`,
+    order: `${config.url.api}/customer/order`,
   },
   auth: {
     refresh: `${config.url.api}/auth/refresh`,

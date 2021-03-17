@@ -17,15 +17,16 @@ const Home = ({ navigation }) => {
 
   const _handleGetSeller = async () => {
     if (currentPage > lastPage) return null;
-    await getSellers({ page: currentPage });
+    await getSellers({ page: currentPage, limit: 10 });
   };
 
   useEffect(() => {
     _handleGetSeller();
-    return () => {
-      dispatch(setLastPage(2));
+    const unsubscribe = navigation.addListener('blur', async () => {
       dispatch(setCurrentPage(1));
-    };
+      dispatch(setLastPage(2));
+    });
+    return unsubscribe;
   }, []);
 
   const renderContent = () => (

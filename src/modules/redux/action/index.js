@@ -9,3 +9,4 @@ export * from './provinceAction';
 export * from './cityAction';
 export * from './districtAction';
 export * from './villageAction';
+export * from './orderAction';

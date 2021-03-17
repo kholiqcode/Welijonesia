@@ -1,13 +1,16 @@
+import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
+import indonesianLocale from 'moment/locale/id';
 import React, { useState } from 'react';
-
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ICChat, ICDownCircle, ICLink, ICUpCircle, ILNoPhoto } from '../../../assets';
-import { FONT_MEDIUM, GRAY_DARK, GRAY_THIN, PRIMARY, WHITE } from '../../../styles';
+import { ICChat, ICDownCircle, ICLink, ICUpCircle } from '../../../assets';
+import { FONT_MEDIUM, FONT_REGULAR, GRAY_DARK, GRAY_THIN, PRIMARY, WHITE } from '../../../styles';
 import { Button, Gap } from '../../atoms';
 import { OrderItem } from '../../molecules';
 
-const CardOrder = () => {
+const CardOrder = ({ order }) => {
   const [expand, setExpand] = useState(false);
+  const navigation = useNavigation();
   return (
     <View
       style={{
@@ -43,20 +46,31 @@ const CardOrder = () => {
             justifyContent: 'space-between',
           }}
         >
-          <Text style={{ ...FONT_MEDIUM(16), color: GRAY_DARK }}>#TRX0548484848484</Text>
+          <Text style={{ ...FONT_MEDIUM(16), color: GRAY_DARK }}>
+            #TRX{moment(order?.created_at).unix()}
+          </Text>
           <Gap height={5} />
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image source={ILNoPhoto} style={{ height: 35, width: 35 }} />
+            <Image
+              source={{ uri: order?.seller?.picturePath }}
+              style={{ height: 35, width: 35, borderRadius: 30 }}
+            />
             <Gap width={10} />
-            <Text style={{ ...FONT_MEDIUM(16) }}>Pak Sukardi</Text>
+            <Text style={{ ...FONT_MEDIUM(16) }}>{order?.seller?.name}</Text>
           </View>
           <Text style={{ ...FONT_MEDIUM(12), marginTop: 10, color: GRAY_DARK }}>
-            12 Januari 2020
+            {moment(order.created_at).local(indonesianLocale).format('LLL')}
           </Text>
         </View>
         {expand ? (
           <View style={styles.sellerNav}>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('SellerDetail', {
+                  id: order?.seller?.id,
+                })
+              }
+            >
               <ICLink height={24} width={24} />
             </TouchableOpacity>
             <Gap width={15} />
@@ -77,11 +91,9 @@ const CardOrder = () => {
           <View style={styles.sectionWrapper}>
             <Gap height={10} />
             <View style={styles.orderList}>
-              <OrderItem />
-              <OrderItem />
-              <OrderItem />
-              <OrderItem />
-              <OrderItem />
+              {order?.orderdetails?.map((orderDetail, index) => (
+                <OrderItem orderdetail={orderDetail} key={index.toString()} />
+              ))}
             </View>
           </View>
           <View style={styles.sectionWrapper}>
@@ -97,23 +109,25 @@ const CardOrder = () => {
               <Text style={styles.subTitle}>Pengiriman</Text>
             </View>
             <View style={styles.valueWrapper}>
-              <Text>COD</Text>
-            </View>
-          </View>
-          <View style={styles.sectionWrapper}>
-            <View style={styles.subTitleWrapper}>
-              <Text style={styles.subTitle}>Alamat</Text>
-            </View>
-            <View>
-              <Text numberOfLines={3}>
-                Shinta Mauliantika, 082244016472, RT 003/RW 006, Desa Buduan Utara, Kec. Suboh, Kab.
-                Situbondo
+              <Text style={{ ...FONT_REGULAR(14) }}>
+                {order?.shipping_method === 0 ? 'Diantar' : 'Ambil Sendiri'}
               </Text>
             </View>
           </View>
+          {order?.shipping_method === 0 && (
+            <View style={styles.sectionWrapper}>
+              <View style={styles.subTitleWrapper}>
+                <Text style={styles.subTitle}>Alamat</Text>
+              </View>
+              <View>
+                <Text numberOfLines={3}>{order?.customer_address}</Text>
+              </View>
+            </View>
+          )}
+
           <View style={styles.sectionTotalWrapper}>
             <Text style={styles.subTitle}>Total Pesanan</Text>
-            <Text style={styles.subTitle}>Rp 100.000</Text>
+            <Text style={styles.subTitle}>Rp {order?.billing?.total}</Text>
           </View>
           <View style={{ paddingVertical: 10 }}>
             <Button text="Batalkan Pesanan" danger />

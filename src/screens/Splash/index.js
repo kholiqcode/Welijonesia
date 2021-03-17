@@ -12,7 +12,7 @@ const Splash = ({ navigation }) => {
   useEffect(() => {
     setTimeout(() => {
       getData('TOKEN').then((res) => {
-        if (res.value) {
+        if (res?.value) {
           navigation.reset({ index: 0, routes: [{ name: 'CustomerMainScreen' }] });
         } else {
           navigation.replace('CustomerAuth');

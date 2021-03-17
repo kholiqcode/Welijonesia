@@ -1,31 +1,43 @@
 import API from '../../configs/api';
-import { setAddress, setAddresses, setError, store } from '../../modules';
+import {
+  setAddress,
+  setCart,
+  setCurrentPage,
+  setError,
+  setLastPage,
+  setLoading,
+  setOrders,
+  store,
+} from '../../modules';
 import { getData, handleAsync } from '../../utilities';
 
 const { dispatch } = store;
 
-export const getAddresses = async (payload = {}) => {
+export const getOrders = async (payload = {}) => {
   console.log(payload);
   getData('TOKEN').then(async (resToken) => {
+    dispatch(setLoading(true));
     const [res, err] = await handleAsync(
-      API.customer.getAddress({
+      API.customer.getOrder({
         headers: {
           Authorization: resToken.value,
         },
         params: payload,
       }),
     );
+    dispatch(setLoading(false));
     if (err) throw err;
-    console.log(res.data);
-    dispatch(setAddresses(res.data.address));
+    dispatch(setOrders(res.data.order.data));
+    dispatch(setLastPage(res.data.order.last_page));
+    dispatch(setCurrentPage(payload.page + 1));
   });
 };
 
-export const getAddress = async (payload = {}) => {
+export const getOrder = async (payload = {}) => {
   console.log(payload);
   getData('TOKEN').then(async (resToken) => {
     const [res, err] = await handleAsync(
-      API.customer.getAddress({
+      API.customer.getOrder({
         headers: {
           Authorization: resToken.value,
         },
@@ -37,25 +49,28 @@ export const getAddress = async (payload = {}) => {
   });
 };
 
-export const storeAddress = async (payload = {}) => {
+export const storeOrder = async (payload = {}) => {
   console.log(payload);
+  dispatch(setError({ isError: false, message: '' }));
   getData('TOKEN').then(async (resToken) => {
     const [res, err] = await handleAsync(
-      API.customer.storeAddress({
+      API.customer.storeOrder({
         headers: {
           Authorization: resToken.value,
         },
         params: payload,
       }),
     );
+    console.log(res);
     if (err)
       return dispatch(
         setError({ isError: true, message: err?.meta?.message ?? 'Terjadi Kesalahan' }),
       );
+    dispatch(setCart({}));
     return dispatch(
       setError({
         isError: false,
-        message: res?.meta?.message ?? 'Alamat berhasil ditambahkan',
+        message: res?.meta?.message ?? 'Pemesanan anda berhasil',
       }),
     );
   });

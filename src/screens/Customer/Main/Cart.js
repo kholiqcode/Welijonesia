@@ -1,6 +1,5 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import React, { useState, useEffect, useCallback, memo } from 'react';
-
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import {
   Dimensions,
   RefreshControl,
@@ -13,50 +12,108 @@ import {
 import { useSelector } from 'react-redux';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { CardCart, Gap, Header, Input, Notif } from '../../../components';
-import { getCart } from '../../../services';
+import { getAddresses, getCart, storeOrder } from '../../../services';
 import { getPaymentMethods } from '../../../services/paymentMethod';
 import { FONT_MEDIUM, GRAY_LIGHT, GRAY_MEDIUM, GRAY_THIN, WHITE } from '../../../styles';
+import { showMessage } from '../../../utilities';
 
-const Cart = () => {
+const Cart = ({ navigation }) => {
   const tabBarHeight = useBottomTabBarHeight();
   const sheetRef = React.useRef(null);
   const [selectPayment, setSelectPayment] = useState(false);
   const [searchPayment, setSearchPayment] = useState('');
-  const [listPayment, setListPayment] = useState();
+  const [listBottomSheet, setListBottomSheet] = useState();
   const [paymentMethod, setPaymentMethod] = useState({});
-  const [selectShippig, setSelectShippig] = useState(false);
-  const { isLoading } = useSelector((state) => state.globalReducer);
+  const [address, setAddress] = useState({});
+  const [shipping, setShipping] = useState('');
+  const [selectShipping, setSelectShipping] = useState(false);
+  const [selectAddress, setSelectAddress] = useState(false);
+  const { isLoading, isError, message } = useSelector((state) => state.globalReducer);
   const { paymentMethods } = useSelector((state) => state.paymentMethodReducer);
+  const { addresses } = useSelector((state) => state.addressReducer);
+  const { cart } = useSelector((state) => state.cartReducer);
 
   useEffect(() => {
-    _handleGetCart();
+    _handleGetAddress();
+    _handleGetPaymentMethod();
+    navigation.addListener('focus', () => {
+      _handleGetCart();
+    });
+    const unsubscribe = navigation.addListener('blur', () => {
+      sheetRef.current.snapTo(1);
+      setPaymentMethod({});
+      setAddress({});
+    });
+    return unsubscribe;
   }, []);
 
   useEffect(() => {
-    setListPayment(paymentMethods);
-  }, [paymentMethods]);
+    if (selectPayment) return setListBottomSheet(paymentMethods);
+    if (selectAddress) return setListBottomSheet(addresses);
+  }, [selectPayment, selectAddress]);
 
   const _handleGetCart = useCallback(async () => {
     await getCart();
   }, []);
 
-  const handleSelectPayment = useCallback(async () => {
-    setSelectPayment(true);
+  const _handleGetAddress = useCallback(async () => {
+    await getAddresses();
+  }, []);
+
+  const _handleGetPaymentMethod = useCallback(async () => {
     await getPaymentMethods();
-    sheetRef.current.snapTo(0);
-  }, [selectPayment]);
+  }, []);
+
+  const handleSelect = useCallback(
+    async (selected) => {
+      sheetRef.current.snapTo(0);
+      setSelectPayment(false);
+      setSelectAddress(false);
+      setSelectShipping(false);
+      if (selected === 'paymentMethod') setSelectPayment(true);
+      if (selected === 'shipping') setSelectShipping(true);
+      if (selected === 'address') setSelectAddress(true);
+    },
+    [selectPayment, selectAddress, selectShipping],
+  );
 
   const _handleSearchPayment = (value) => {
     setSearchPayment(value);
     const SearchedPayment = paymentMethods.filter((paymentMethod) =>
       paymentMethod.name.toLowerCase().includes(value.toLowerCase()),
     );
-    setListPayment(SearchedPayment);
+    setListBottomSheet(SearchedPayment);
   };
 
-  const handleSelectShippig = () => {
-    setSelectShippig(true);
-    sheetRef.current.snapTo(0);
+  const _handleOrder = async () => {
+    console.log(paymentMethod);
+    if (Object.keys(paymentMethod).length === 0) {
+      return showMessage('Metode Pembayaran harus diisi!');
+    }
+    if (shipping === null || shipping === '') {
+      return showMessage('Pengiriman harus diisi!');
+    }
+    if (shipping === 0 && Object.keys(address).length === 0) {
+      return showMessage('Alamat harus diisi!');
+    }
+    if (shipping === 0) {
+      await storeOrder({
+        payment_method: paymentMethod?.id,
+        shipping_method: shipping,
+        address: address?.id,
+      });
+    } else {
+      await storeOrder({
+        payment_method: paymentMethod?.id,
+        shipping_method: shipping,
+      });
+    }
+    if (message) {
+      showMessage(message, 'success');
+    }
+    navigation.navigate('CustomerMainScreen', {
+      screen: 'Order',
+    });
   };
 
   const renderContent = () => (
@@ -72,8 +129,8 @@ const Cart = () => {
       }}
     >
       {selectPayment &&
-        listPayment &&
-        listPayment?.map((paymentMethod, index) => (
+        listBottomSheet &&
+        listBottomSheet?.map((paymentMethod, index) => (
           <TouchableOpacity
             style={{
               padding: 10,
@@ -83,14 +140,66 @@ const Cart = () => {
             }}
             onPress={() => {
               sheetRef.current.snapTo(1);
-              setPaymentMethod({ id: paymentMethod.id, name: paymentMethod.name });
+              setPaymentMethod({ id: paymentMethod?.id, name: paymentMethod?.name });
             }}
             key={index.toString()}
           >
-            <Text style={{ ...FONT_MEDIUM(14) }}>{paymentMethod.name}</Text>
+            <Text style={{ ...FONT_MEDIUM(14) }}>{paymentMethod?.name}</Text>
           </TouchableOpacity>
         ))}
 
+      {selectShipping && (
+        <View>
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              alignItems: 'center',
+              borderBottomWidth: 1,
+              borderBottomColor: GRAY_THIN,
+            }}
+            onPress={() => {
+              setShipping(0);
+              sheetRef.current.snapTo(1);
+            }}
+          >
+            <Text style={{ ...FONT_MEDIUM(14) }}>Diantar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              alignItems: 'center',
+              borderBottomWidth: 1,
+              borderBottomColor: GRAY_THIN,
+            }}
+            onPress={() => {
+              setShipping(1);
+              sheetRef.current.snapTo(1);
+            }}
+          >
+            <Text style={{ ...FONT_MEDIUM(14) }}>Ambil Sendiri</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {selectAddress &&
+        listBottomSheet &&
+        listBottomSheet?.map((_address, index) => (
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              alignItems: 'center',
+              borderBottomWidth: 1,
+              borderBottomColor: GRAY_THIN,
+            }}
+            onPress={() => {
+              sheetRef.current.snapTo(1);
+              setAddress({ id: _address.id, name: _address.name, address: _address.address });
+            }}
+            key={index.toString()}
+          >
+            <Text style={{ ...FONT_MEDIUM(14) }}>{_address.name}</Text>
+          </TouchableOpacity>
+        ))}
       {/* <TouchableOpacity
         style={{
           padding: 10,
@@ -143,7 +252,7 @@ const Cart = () => {
       />
       <Gap height={10} />
       <Input
-        placeholder="Cari metode pembayaran"
+        placeholder="Cari..."
         variant="roundedPill"
         search
         rightIcon
@@ -154,7 +263,9 @@ const Cart = () => {
           _handleSearchPayment(value);
           sheetRef.current.snapTo(0);
         }}
-        onFocus={() => sheetRef.current.snapTo(0)}
+        onFocus={() => {
+          sheetRef.current.snapTo(0);
+        }}
       />
     </View>
   );
@@ -170,7 +281,16 @@ const Cart = () => {
           <RefreshControl refreshing={isLoading} onRefresh={() => _handleGetCart()} />
         }
       >
-        <CardCart handleSelectPayment={handleSelectPayment} paymentMethod={paymentMethod} />
+        {Object.keys(cart).length > 0 && (
+          <CardCart
+            handleSelect={handleSelect}
+            paymentMethod={paymentMethod}
+            shipping={shipping}
+            address={address}
+            onPress={() => _handleOrder()}
+          />
+        )}
+
         <Gap height={tabBarHeight} />
       </ScrollView>
       <BottomSheet
@@ -180,10 +300,9 @@ const Cart = () => {
         renderHeader={renderHeader}
         enabledInnerScrolling
         initialSnap={1}
-        onCloseEnd={() => {
-          setListPayment([]);
+        onCloseStart={() => {
+          setListBottomSheet(null);
           setSearchPayment('');
-          setSelectPayment(false);
         }}
       />
     </View>

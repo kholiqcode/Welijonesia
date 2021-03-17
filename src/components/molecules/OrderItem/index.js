@@ -3,18 +3,20 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import { ILNoPhoto } from '../../../assets';
 import { FONT_REGULAR, PRIMARY, SECONDARY } from '../../../styles';
 
-const OrderItem = () => (
+const OrderItem = ({ orderdetail }) => (
   <View style={styles.orderListItem}>
     <View style={styles.photoProductWrapper}>
       <Image source={ILNoPhoto} style={styles.photoProduct} />
     </View>
     <View style={styles.detailProductWrapper}>
-      <Text style={styles.categoryProduct}>Test</Text>
-      <Text style={styles.nameProduct}>Test</Text>
-      <Text style={styles.priceProduct}>Rp 1000000</Text>
+      <Text style={styles.categoryProduct}>
+        {orderdetail?.productdetail?.product?.comodity?.category?.name}
+      </Text>
+      <Text style={styles.nameProduct}>{orderdetail?.productdetail?.product?.comodity?.name}</Text>
+      <Text style={styles.priceProduct}>Rp {orderdetail?.subtotal}</Text>
     </View>
     <View style={styles.totalOrder}>
-      <Text style={styles.qtyProduct}>10</Text>
+      <Text style={styles.qtyProduct}>{orderdetail?.quantity}</Text>
     </View>
   </View>
 );

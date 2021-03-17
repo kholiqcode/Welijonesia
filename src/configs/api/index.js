@@ -24,6 +24,8 @@ API.customer = {
   getVillage: ApiRequest.get(baseUrl.customer.village),
   getAddress: ApiRequest.get(baseUrl.customer.address),
   storeAddress: ApiRequest.post(baseUrl.customer.address),
+  storeOrder: ApiRequest.post(baseUrl.customer.order),
+  getOrder: ApiRequest.get(baseUrl.customer.order),
 };
 
 // Customer

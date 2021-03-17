@@ -1,6 +1,6 @@
 import { Alert } from 'react-native';
 import API from '../../configs/api';
-import { setCart, setLoading, store } from '../../modules';
+import { setCart, setError, setLoading, store } from '../../modules';
 import { getData, handleAsync, showMessage } from '../../utilities';
 
 const { dispatch } = store;
@@ -18,10 +18,12 @@ export const getCart = async () =>
         },
       }),
     );
-    if (err !== undefined) throw err;
-    dispatch(setCart(res.data.cart));
     dispatch(setLoading(false));
-    if (res) showMessage(res?.meta?.message, 'success');
+    if (err !== undefined) {
+      return dispatch(setError({ isError: true, message: err?.meta?.message }));
+    }
+    dispatch(setCart(res.data.cart));
+    // if (res) showMessage(res?.meta?.message, 'success');
   });
 
 /**

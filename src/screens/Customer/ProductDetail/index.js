@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { ICBackActive, ICChat, ICLink, ICMarker, ILNoPhoto } from '../../../assets';
 import { Button, Counter, Gap, SelectItem } from '../../../components';
-import { setCounterValue } from '../../../modules';
+import { setCounterValue, setProduct } from '../../../modules';
 import { getProduct, storeOrUpdateCart } from '../../../services';
 import {
   boxShadow,
@@ -31,7 +31,7 @@ const ProductDetail = ({ navigation, route }) => {
   const { product } = useSelector((state) => state.productReducer);
   const { reviews } = useSelector((state) => state.reviewReducer);
   const { counterValue } = useSelector((state) => state.globalReducer);
-  const [productDetail, setProductDetail] = useState([]);
+  const [productDetail, setProductDetail] = useState(null);
   const [isAddCart, setIsAddCart] = useState(false);
   const [priceTotal, setPriceTotal] = useState(0);
   const dispatch = useDispatch();
@@ -48,6 +48,10 @@ const ProductDetail = ({ navigation, route }) => {
 
   useEffect(() => {
     _handleGetProduct();
+    return () => {
+      setProductDetail(null);
+      dispatch(setProduct(null));
+    };
   }, []);
 
   const _handleOnSelectedItem = useCallback(
@@ -63,9 +67,10 @@ const ProductDetail = ({ navigation, route }) => {
       if (counterValue <= 0) return showMessage('Jumlah pesanan anda tidak boleh kurang dari 0');
       if (priceTotal <= 0) return showMessage('Anda belum menentukan jumlah pesanan');
       sheetRef.current.snapTo(1);
-      await storeOrUpdateCart({ product_detail: productDetail.id, qty: counterValue });
-      setProductDetail([]);
+      await storeOrUpdateCart({ product_detail: productDetail?.id, qty: counterValue });
+      setProductDetail(null);
       setIsAddCart(false);
+      dispatch(setCounterValue(1));
       navigation.navigate('CustomerMainScreen', {
         screen: 'Cart',
       });
@@ -155,13 +160,13 @@ const ProductDetail = ({ navigation, route }) => {
       {/* <StatusBar translucent backgroundColor="transparent" /> */}
       <View style={styles.container}>
         {/* <Header /> */}
-        <Image source={{ uri: product.comodity?.picturePath }} style={styles.productImage} />
+        <Image source={{ uri: product?.comodity?.picturePath }} style={styles.productImage} />
         <View style={styles.productInfo}>
           <View style={styles.productDetail}>
             <View>
-              <Text style={styles.txtCategory}>{product.comodity?.category?.name}</Text>
+              <Text style={styles.txtCategory}>{product?.comodity?.category?.name}</Text>
               <Gap height={2} />
-              <Text style={styles.txtProductName}>{product.comodity?.name}</Text>
+              <Text style={styles.txtProductName}>{product?.comodity?.name}</Text>
             </View>
             <Text style={styles.txtProductPrice}>
               Rp {Number.isNaN(priceTotal) ? 0 : priceTotal}
@@ -191,11 +196,11 @@ const ProductDetail = ({ navigation, route }) => {
               <Gap height={5} />
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Image
-                  source={{ uri: product.seller?.picturePath }}
+                  source={{ uri: product?.seller?.picturePath }}
                   style={{ height: 35, width: 35, borderRadius: 30 }}
                 />
                 <Gap width={10} />
-                <Text style={{ ...FONT_MEDIUM(16) }}>{product.seller?.name}</Text>
+                <Text style={{ ...FONT_MEDIUM(16) }}>{product?.seller?.name}</Text>
               </View>
             </View>
             <View

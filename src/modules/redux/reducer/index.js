@@ -11,6 +11,7 @@ import { provinceReducer } from './provinceReducer';
 import { cityReducer } from './cityReducer';
 import { districtReducer } from './districtReducer';
 import { villageReducer } from './villageReducer';
+import { orderReducer } from './orderReducer';
 
 const reducer = combineReducers({
   globalReducer,
@@ -25,6 +26,7 @@ const reducer = combineReducers({
   cityReducer,
   districtReducer,
   villageReducer,
+  orderReducer,
 });
 
 export default reducer;

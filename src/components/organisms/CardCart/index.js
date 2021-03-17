@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { ICChat, ICLink, ILNoPhoto } from '../../../assets';
@@ -7,8 +7,7 @@ import { FONT_MEDIUM, GRAY_THIN, PRIMARY, WHITE } from '../../../styles';
 import { Button, Gap, Input } from '../../atoms';
 import { CartItem } from '../../molecules';
 
-const CardCart = ({ handleSelectPayment, paymentMethod }) => {
-  const [expand, setExpand] = useState(false);
+const CardCart = ({ handleSelect, paymentMethod, shipping, address, onPress }) => {
   const { cart } = useSelector((state) => state.cartReducer);
   const navigation = useNavigation();
   return (
@@ -85,14 +84,14 @@ const CardCart = ({ handleSelectPayment, paymentMethod }) => {
           </View>
           <View style={styles.valueWrapper}>
             {/* <Text style={styles.txtValue}>Pilih Pembayaran</Text> */}
-            <TouchableOpacity style={{ flex: 1 }} onPress={() => handleSelectPayment()}>
+            <TouchableOpacity style={{ flex: 1 }} onPress={() => handleSelect('paymentMethod')}>
               <Input
                 placeholder="Pilih Pembayaran"
                 select
                 rightIcon
                 disable
                 noBorder
-                onPress={() => handleSelectPayment()}
+                onPress={() => handleSelect('paymentMethod')}
                 value={paymentMethod.name}
               />
             </TouchableOpacity>
@@ -110,34 +109,47 @@ const CardCart = ({ handleSelectPayment, paymentMethod }) => {
             <TouchableOpacity style={{ marginRight: 5 }} onPress={() => setExpand(true)}>
               <ICDownCircle height={30} width={30} />
             </TouchableOpacity> */}
-            <View style={{ flex: 1 }}>
-              <Input placeholder="Pilih Pengiriman" select rightIcon disable noBorder />
-            </View>
+            <TouchableOpacity style={{ flex: 1 }} onPress={() => handleSelect('shipping')}>
+              <Input
+                placeholder="Pilih Pengiriman"
+                value={shipping === 0 ? 'Diantar' : shipping === 1 ? 'Ambil Sendiri' : ''}
+                select
+                rightIcon
+                disable
+                onPress={() => handleSelect('shipping')}
+                noBorder
+              />
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.sectionWrapper}>
-          <View style={styles.subTitleWrapper}>
-            <Text style={styles.subTitle}>Alamat</Text>
-          </View>
-          <View style={styles.valueWrapper}>
-            {/* <Text style={styles.txtValue} numberOfLines={3}>
-              Pilih Alamat
-            </Text>
-            <TouchableOpacity style={{ marginRight: 5 }} onPress={() => setExpand(true)}>
-              <ICDownCircle height={30} width={30} />
-            </TouchableOpacity> */}
-            <View style={{ flex: 1 }}>
-              <Input placeholder="Pilih Alamat" select rightIcon disable noBorder />
+        {shipping === 0 && (
+          <View style={styles.sectionWrapper}>
+            <View style={styles.subTitleWrapper}>
+              <Text style={styles.subTitle}>Alamat</Text>
+            </View>
+            <View style={styles.valueWrapper}>
+              <TouchableOpacity style={{ flex: 1 }} onPress={() => handleSelect('address')}>
+                <Input
+                  placeholder="Pilih Alamat"
+                  select
+                  rightIcon
+                  disable
+                  noBorder
+                  value={address?.address ?? ''}
+                  onPress={() => handleSelect('address')}
+                />
+              </TouchableOpacity>
             </View>
           </View>
-        </View>
+        )}
+
         <Gap height={10} />
         <View style={styles.sectionTotalWrapper}>
           <Text style={styles.subTitle}>Total Pesanan</Text>
           <Text style={styles.subTitle}>Rp {cart.total}</Text>
         </View>
         <View style={{ paddingVertical: 10 }}>
-          <Button text="Pesan Sekarang" />
+          <Button text="Pesan Sekarang" onPress={onPress} />
         </View>
       </View>
     </View>
