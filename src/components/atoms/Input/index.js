@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import { useState } from 'react/cjs/react.development';
 import { ICDown, ICHide, ICMore, ICSearch, ICShow } from '../../../assets';
-import { FONT_MEDIUM, GRAY_THIN, PRIMARY, WHITE } from '../../../styles';
+import { BLACK, FONT_MEDIUM, GRAY_DARK, GRAY_THIN, PRIMARY, WHITE } from '../../../styles';
 
 const Input = ({
   forwardedRef,
@@ -74,6 +73,7 @@ const Input = ({
         textContentType={textContentType}
         autoCompleteType={autoCompleteType}
         placeholder={placeholder}
+        placeholderTextColor={GRAY_DARK}
         keyboardType={keyboardType}
         onChangeText={onChangeText}
         secureTextEntry={hidePassword}
@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
     ...FONT_MEDIUM(14),
     justifyContent: 'center',
     paddingEnd: 40,
+    color: BLACK,
   }),
   iconWrapper: {
     position: 'absolute',
