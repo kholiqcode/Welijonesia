@@ -13,7 +13,7 @@ Welijonesia merupakan startup baru yang ada di kota jember, dimana mempertemakan
 
 ## Demo
 
-<p float="left">
+<p float="center">
   <img src="./demo/welijonesia_demo.gif" width="400" height="700" alt="App Demo"/>
 </p>
 
