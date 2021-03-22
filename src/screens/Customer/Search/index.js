@@ -52,7 +52,7 @@ const Search = ({ navigation }) => {
             </Text>
           </View>
         )}
-        data={[0, 1, 2, 3, 4]}
+        data={[0]}
         keyExtractor={(_, index) => index.toString()}
         renderItem={(item) => <ListItem />}
       />
