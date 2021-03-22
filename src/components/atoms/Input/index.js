@@ -27,6 +27,9 @@ const Input = ({
   multiline,
   numberOfLines,
   onFocus,
+  spellCheck,
+  autoCorrect,
+  autoFocus,
 }) => {
   const [border, setBorder] = useState(GRAY_THIN);
   const [radius, setRadius] = useState(30 / 2);
@@ -84,6 +87,9 @@ const Input = ({
         numberOfLines={numberOfLines}
         multiline={multiline}
         returnKeyType={search ? 'search' : 'done'}
+        spellCheck={spellCheck}
+        autoCorrect={autoCorrect}
+        autoFocus={autoFocus}
       />
       {rightIcon && (
         <TouchableOpacity style={styles.iconWrapper} onPress={onPress}>
@@ -105,9 +111,9 @@ const styles = StyleSheet.create({
     borderWidth: noBorder ? 0 : 1,
     borderColor: border,
     borderRadius: radius,
-    paddingStart: 15,
+    paddingHorizontal: 15,
     paddingVertical: 8,
-    ...FONT_MEDIUM(14),
+    ...FONT_MEDIUM(12),
     justifyContent: 'center',
     paddingEnd: 40,
     color: BLACK,

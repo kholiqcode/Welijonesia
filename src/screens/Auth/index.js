@@ -1,4 +1,4 @@
 import ChooseRole from './ChooseRole';
-import CustomerAuth from './CustomerAuth';
 
-export { CustomerAuth, ChooseRole };
+export { ChooseRole };
+export * from './CustomerAuth';

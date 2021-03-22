@@ -4,6 +4,7 @@ import { AuthContainer, AuthTopTab } from '../../../components';
 import Forgot from './Forgot';
 import Login from './Login';
 import Register from './Register';
+import Verification from './Verification';
 
 const TopTab = createMaterialTopTabNavigator();
 const TopTabAuth = (props) => {
@@ -34,4 +35,4 @@ const CustomerAuth = (props) => {
   );
 };
 
-export default CustomerAuth;
+export { CustomerAuth, Verification };

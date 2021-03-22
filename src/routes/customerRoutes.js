@@ -12,8 +12,18 @@ import {
   Home,
   Order,
   ProductDetail,
+  Search,
   SellerDetail,
 } from '../screens/Customer';
+
+const forFade = ({ current }) => ({
+  cardStyle: {
+    opacity: current.progress.interpolate({
+      inputRange: [0, 0.5, 0.9, 1],
+      outputRange: [0, 0.25, 0.7, 1],
+    }),
+  },
+});
 
 export const customerRoutes = [
   {
@@ -62,6 +72,14 @@ export const customerRoutes = [
     options: {
       headerShown: false,
       cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid,
+    },
+  },
+  {
+    name: 'SearchCustomer',
+    component: Search,
+    options: {
+      headerShown: false,
+      cardStyleInterpolator: forFade,
     },
   },
 ];

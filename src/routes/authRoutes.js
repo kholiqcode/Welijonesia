@@ -1,6 +1,5 @@
 import { CardStyleInterpolators } from '@react-navigation/stack';
-import { CustomerAuth, Splash } from '../screens';
-import Verification from '../screens/Auth/CustomerAuth/Verification';
+import { CustomerAuth, Splash, Verification } from '../screens';
 
 // const forFade = ({ current }) => ({
 //   cardStyle: {

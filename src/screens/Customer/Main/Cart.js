@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import BottomSheet from 'reanimated-bottom-sheet';
