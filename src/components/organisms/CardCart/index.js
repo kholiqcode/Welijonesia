@@ -2,12 +2,19 @@ import { useNavigation } from '@react-navigation/native';
 import React, { memo } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
-import { ICChat, ICLink, ILNoPhoto } from '../../../assets';
+import { ILNoPhoto } from '../../../assets';
 import { FONT_MEDIUM, GRAY_THIN, PRIMARY, WHITE } from '../../../styles';
 import { Button, Gap, Input } from '../../atoms';
 import { CartItem } from '../../molecules';
 
-const CardCart = ({ handleSelect, paymentMethod, shipping, address, onPress }) => {
+const CardCart = ({
+  handleSelect,
+  paymentMethod,
+  shipping,
+  address,
+  onPress,
+  handleDeleteCart,
+}) => {
   const { cart } = useSelector((state) => state.cartReducer);
   const navigation = useNavigation();
   return (
@@ -56,15 +63,15 @@ const CardCart = ({ handleSelect, paymentMethod, shipping, address, onPress }) =
           </View>
         </View>
         <View style={styles.sellerNav}>
-          <TouchableOpacity
+          <Button
+            btnIcon="link"
             onPress={() => navigation.navigate('SellerDetail', { id: cart?.seller?.id })}
-          >
-            <ICLink height={24} width={24} />
-          </TouchableOpacity>
+          />
           <Gap width={15} />
-          <TouchableOpacity>
-            <ICChat height={24} width={24} />
-          </TouchableOpacity>
+          <Button
+            btnIcon="chat"
+            onPress={() => navigation.navigate('SellerDetail', { id: cart?.seller?.id })}
+          />
         </View>
       </View>
 
@@ -74,7 +81,11 @@ const CardCart = ({ handleSelect, paymentMethod, shipping, address, onPress }) =
           <Gap height={10} />
           <View style={styles.orderList}>
             {cart?.cartdetails?.map((item, index) => (
-              <CartItem cartItem={item} key={index.toString()} />
+              <CartItem
+                cartItem={item}
+                key={index.toString()}
+                handleDeleteCart={handleDeleteCart}
+              />
             ))}
           </View>
         </View>

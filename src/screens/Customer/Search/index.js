@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { Button, Header } from '../../../components';
-import { FONT_BOLD, FONT_REGULAR, GRAY_MEDIUM, RED } from '../../../styles';
+import { FONT_BOLD, FONT_REGULAR, GRAY_DARK, GRAY_MEDIUM, RED } from '../../../styles';
 
 const Search = ({ navigation }) => {
   const ListItem = () => (
@@ -14,7 +14,7 @@ const Search = ({ navigation }) => {
         paddingHorizontal: 10,
       }}
     >
-      <Text style={{ ...FONT_REGULAR(14) }}>Lijo Jember</Text>
+      <Text style={{ ...FONT_REGULAR(14), color: GRAY_DARK }}>Lijo Jember</Text>
       <Button btnIcon="trash" onPress={() => navigation.goBack()} />
     </View>
   );

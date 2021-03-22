@@ -11,7 +11,7 @@ export const cartReducer = (state = inititalCart, action) => {
       };
     case 'RESET_CART':
       return {
-        cart: [],
+        cart: inititalCart.cart,
       };
 
     default:

@@ -78,10 +78,11 @@ const SellerDetail = ({ navigation, route }) => {
 
   useEffect(() => {
     _handleGetSeller();
-    return () => {
+    const unmounted = async () => {
       dispatch(resetProduct());
       console.log('did unmount');
     };
+    return unmounted;
   }, [id]);
 
   const renderContent = () => (

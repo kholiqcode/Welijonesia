@@ -1,10 +1,12 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import { ILNoPhoto } from '../../../assets';
+import { deleteCart } from '../../../services';
 import { FONT_REGULAR, PRIMARY, SECONDARY } from '../../../styles';
-import { Counter } from '../../atoms';
+import { Button, Counter } from '../../atoms';
 
-const CartItem = ({ counter, cartItem }) => (
+const CartItem = ({ counter, cartItem, handleDeleteCart }) => (
   <View style={styles.orderListItem}>
     <View style={styles.photoProductWrapper}>
       <Image source={ILNoPhoto} style={styles.photoProduct} />
@@ -27,6 +29,7 @@ const CartItem = ({ counter, cartItem }) => (
         </Text>
       )}
     </View>
+    <Button btnIcon="trash" onPress={() => handleDeleteCart(cartItem?.id)} />
   </View>
 );
 

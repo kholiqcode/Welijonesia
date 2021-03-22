@@ -7,12 +7,13 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { CardCart, Gap, Header, Input, Notif } from '../../../components';
-import { getAddresses, getCart, storeOrder } from '../../../services';
+import { resetCart } from '../../../modules';
+import { deleteCart, getAddresses, getCart, storeOrder } from '../../../services';
 import { getPaymentMethods } from '../../../services/paymentMethod';
 import { FONT_MEDIUM, GRAY_LIGHT, GRAY_MEDIUM, GRAY_THIN, WHITE } from '../../../styles';
 import { showMessage } from '../../../utilities';
@@ -28,7 +29,7 @@ const Cart = ({ navigation }) => {
   const [shipping, setShipping] = useState('');
   const [selectShipping, setSelectShipping] = useState(false);
   const [selectAddress, setSelectAddress] = useState(false);
-  const { isLoading, isError, message } = useSelector((state) => state.globalReducer);
+  const { isLoading, message } = useSelector((state) => state.globalReducer);
   const { paymentMethods } = useSelector((state) => state.paymentMethodReducer);
   const { addresses } = useSelector((state) => state.addressReducer);
   const { cart } = useSelector((state) => state.cartReducer);
@@ -59,6 +60,11 @@ const Cart = ({ navigation }) => {
   const _handleGetAddress = useCallback(async () => {
     await getAddresses();
   }, []);
+
+  const handleDeleteCart = async (id) => {
+    await deleteCart({ id });
+    await getCart();
+  };
 
   const _handleGetPaymentMethod = useCallback(async () => {
     await getPaymentMethods();
@@ -281,13 +287,14 @@ const Cart = ({ navigation }) => {
           <RefreshControl refreshing={isLoading} onRefresh={() => _handleGetCart()} />
         }
       >
-        {Object.keys(cart).length > 0 && (
+        {cart?.cartdetails !== undefined && cart?.cartdetails.length > 0 && (
           <CardCart
             handleSelect={handleSelect}
             paymentMethod={paymentMethod}
             shipping={shipping}
             address={address}
             onPress={() => _handleOrder()}
+            handleDeleteCart={handleDeleteCart}
           />
         )}
 

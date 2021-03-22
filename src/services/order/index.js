@@ -16,7 +16,7 @@ const { dispatch } = store;
 export const getOrders = async (payload = {}) => {
   console.log(payload);
   getData('TOKEN').then(async (resToken) => {
-    dispatch(setLoading(true));
+    // dispatch(setLoading(true));
     const [res, err] = await handleAsync(
       API.customer.getOrder({
         headers: {
@@ -25,7 +25,7 @@ export const getOrders = async (payload = {}) => {
         params: payload,
       }),
     );
-    dispatch(setLoading(false));
+    // dispatch(setLoading(false));
     if (err) throw err;
     dispatch(setOrders(res.data.order.data));
     dispatch(setLastPage(res.data.order.last_page));

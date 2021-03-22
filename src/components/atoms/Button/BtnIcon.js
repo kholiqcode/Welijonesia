@@ -13,6 +13,8 @@ import {
   ICEmail,
   ICMarker,
   ICRight,
+  ICLink,
+  ICChat,
 } from '../../../assets';
 
 const BtnIcon = ({ btnIcon, onPress, disabled }) => {
@@ -29,6 +31,8 @@ const BtnIcon = ({ btnIcon, onPress, disabled }) => {
     if (btnIcon === 'email') return <ICEmail height={30} width={30} />;
     if (btnIcon === 'marker') return <ICMarker height={30} width={30} />;
     if (btnIcon === 'right') return <ICRight height={30} width={30} />;
+    if (btnIcon === 'link') return <ICLink height={24} width={24} />;
+    if (btnIcon === 'chat') return <ICChat height={24} width={24} />;
     return <ICTrash height={24} width={24} />;
   };
   return (

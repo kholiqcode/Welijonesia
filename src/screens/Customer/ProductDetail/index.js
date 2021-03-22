@@ -71,9 +71,9 @@ const ProductDetail = ({ navigation, route }) => {
       setProductDetail(null);
       setIsAddCart(false);
       dispatch(setCounterValue(1));
-      navigation.navigate('CustomerMainScreen', {
-        screen: 'Cart',
-      });
+      // navigation.navigate('CustomerMainScreen', {
+      //   screen: 'Cart',
+      // });
     } else {
       sheetRef.current.snapTo(0);
     }
@@ -224,7 +224,7 @@ const ProductDetail = ({ navigation, route }) => {
         <FlatList
           style={styles.ratingWrapper}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(_, index) => index.toString()}
           stickyHeaderIndices={[0]}
           scrollEnabled
           data={reviews}
