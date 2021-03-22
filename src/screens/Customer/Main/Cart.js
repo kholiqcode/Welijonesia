@@ -114,9 +114,6 @@ const Cart = ({ navigation }) => {
         shipping_method: shipping,
       });
     }
-    if (message) {
-      showMessage(message, 'success');
-    }
     navigation.navigate('CustomerMainScreen', {
       screen: 'Order',
     });
